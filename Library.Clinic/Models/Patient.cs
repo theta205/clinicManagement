@@ -5,7 +5,7 @@ namespace Library.Clinic.Models
         // Basic Demographics
         public string? Name { get; set; }
         public string? Address {  get; set; }
-        public string? Birthdate {  get; set; }
+        public DateOnly? Birthdate {  get; set; }
         public string? Race {  get; set; }
         public string? Gender {  get; set; }
         public int Id { get; set; }
