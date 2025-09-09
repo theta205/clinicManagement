@@ -3,7 +3,7 @@ namespace Library.Clinic.Models
     public class Physician
     {
         // Basic Demographics
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public DateOnly? GradDate {  get; set; }
         public int LicenseNumber { get; set; }
 
