@@ -13,7 +13,7 @@ namespace Library.Clinic.Models
 
         public override string ToString()
         {
-            return $"{LicenseNumber}. {Name}";
+            return $"Physician: {PhysicianId} and Patient: {PatientId} at {Date}";
         }
 
     }
