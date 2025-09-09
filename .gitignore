@@ -1,2 +1,42 @@
-*/obj
-*/bin
+# Build directories
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userprefs
+*.vs/
+
+# VS Code settings
+.vscode/
+
+# Rider IDE
+.idea/
+
+# NuGet packages
+*.nupkg
+packages/
+*.snupkg
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Rider
+.idea/
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Azure Web App publish folder
+.publish/
+
+# Others
+*.cache
+*.bak
+*.swp
