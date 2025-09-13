@@ -9,9 +9,9 @@ namespace CLI.Clinic
         static void Main(string[] args)
         {
              Console.WriteLine("Welcome to CLinic!");
-            List<Patients?> patients = new List<Patients?>();
-            List<Physicians?> physicians = new List<Physicians?>();
-            List<Appointments?> appointments = new List<Appointments?>();
+            List<Patient?> patients = new List<Patient?>();
+            List<Physician?> physicians = new List<Physician?>();
+            List<Appointment?> appointments = new List<Appointment?>();
             bool cont = true;
             do
             {
@@ -34,19 +34,19 @@ namespace CLI.Clinic
                         patient.Name = input;
 
                         Console.WriteLine("Enter the patients address  (optional):");
-                        var input = Console.ReadLine();
+                        input = Console.ReadLine();
                         patient.Address = string.IsNullOrWhiteSpace(input) ? null : input;
 
                         Console.WriteLine("Enter the patients gender  (optional):");
-                        var input = Console.ReadLine();
+                        input = Console.ReadLine();
                         patient.Gender = string.IsNullOrWhiteSpace(input) ? null : input;
 
                         Console.WriteLine("Enter the patients race  (optional):");
-                        var input = Console.ReadLine();
+                        input = Console.ReadLine();
                         patient.Race = string.IsNullOrWhiteSpace(input) ? null : input;
 
                         Console.Write("Enter patients birth date (yyyy-MM-dd) (optional): ");
-                        string? input = Console.ReadLine();
+                        input = Console.ReadLine();
                         patient.Birthdate = DateOnly.TryParse(input, out var date) ? date : null;
 
                         patient.Prescriptions ??= new List<string>();
@@ -54,7 +54,7 @@ namespace CLI.Clinic
                         while (true)
                         {
                             Console.Write("Prescription: ");
-                            string? input = Console.ReadLine();
+                            input = Console.ReadLine();
 
                             if (string.IsNullOrWhiteSpace(input))
                                 break; // stop if user presses Enter without typing anything
@@ -67,7 +67,7 @@ namespace CLI.Clinic
                         while (true)
                         {
                             Console.Write("Diagnoses: ");
-                            string? input = Console.ReadLine();
+                            input = Console.ReadLine();
 
                             if (string.IsNullOrWhiteSpace(input))
                                 break; // stop if user presses Enter without typing anything
@@ -90,16 +90,16 @@ namespace CLI.Clinic
 
                         break;
                     case "Ph": 
-                    
+
                         var physician = new Physician();
-                        string? input = null;
+                        input = null;
                         while (string.IsNullOrWhiteSpace(input)){
                             Console.WriteLine("Enter the physician's name (required):");
                             input = Console.ReadLine();
                         }
                         physician.Name = input;
 
-                        string? input = null;
+                        input = null;
                         while (string.IsNullOrWhiteSpace(input)){
                             Console.WriteLine("Enter the physician's license number (required):");
                             input = Console.ReadLine();
@@ -107,22 +107,22 @@ namespace CLI.Clinic
                         physician.LicenseNumber = input;
 
                         Console.Write("Enter physician's grad date (yyyy-MM-dd) (optional): ");
-                        string? input = Console.ReadLine();
-                        physician.GradDate = DateOnly.TryParse(input, out var date) ? date : null;
+                        input = Console.ReadLine();
+                        physician.GradDate = DateOnly.TryParse(input, out var graddate) ? graddate : null;
                         
                         physician.Specializations ??= new List<string>();
                         Console.WriteLine("Enter specializations one by one (press Enter on an empty line to finish):");
                         while (true)
                         {
                             Console.Write("Specialization: ");
-                            string? input = Console.ReadLine();
+                            input = Console.ReadLine();
 
                             if (string.IsNullOrWhiteSpace(input))
                                 break; // stop if user presses Enter without typing anything
 
                             physician.Specializations.Add(input);
                         }
-
+                        
                         Console.WriteLine("Physician Added");
 
                         break;

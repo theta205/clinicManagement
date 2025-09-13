@@ -1,1 +1,1 @@
-dotnet run --project "/Users/isaiahrohrer/Documents/csprojects/MyApp/CLI.Clinic/MyApp.csproj"
+dotnet run --project "/Users/isaiahrohrer/Documents/csprojects/MyApp/CLI.Clinic/CLI.Clinic.csproj"
