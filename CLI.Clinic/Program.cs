@@ -25,6 +25,7 @@ namespace CLI.Clinic
                 switch (userChoice)
                 {
                     case "Pa":
+                    case "pa":
                         var patient = new Patient();
                         string? input = null;
                         while (string.IsNullOrWhiteSpace(input)){
@@ -45,9 +46,26 @@ namespace CLI.Clinic
                         input = Console.ReadLine();
                         patient.Race = string.IsNullOrWhiteSpace(input) ? null : input;
 
-                        Console.Write("Enter patients birth date (yyyy-MM-dd) (optional): ");
-                        input = Console.ReadLine();
-                        patient.Birthdate = DateOnly.TryParse(input, out var date) ? date : null;
+                        DateOnly? birthdate = null;
+                        while (true){
+                            Console.Write("Enter patient's birth date (mm/dd/yyyy) (optional, press Enter to skip): ");
+                            input = Console.ReadLine();
+
+                            if (string.IsNullOrWhiteSpace(input)) {
+                                // User skipped
+                                break;
+                            }
+
+                            if (DateOnly.TryParse(input, out DateOnly date)){
+                                birthdate = date;
+                                break;
+                            }
+                            else{
+                                Console.WriteLine("Invalid date format! Please use (mm/dd/yyyy).\n");
+                            }
+                        }
+
+                        patient.Birthdate = birthdate;
 
                         patient.Prescriptions ??= new List<string>();
                         Console.WriteLine("Enter prescriptions one by one (press Enter on an empty line to finish):");
@@ -90,6 +108,7 @@ namespace CLI.Clinic
 
                         break;
                     case "Ph": 
+                    case "ph":
 
                         var physician = new Physician();
                         input = null;
@@ -106,9 +125,25 @@ namespace CLI.Clinic
                         }
                         physician.LicenseNumber = input;
 
-                        Console.Write("Enter physician's grad date (yyyy-MM-dd) (optional): ");
-                        input = Console.ReadLine();
-                        physician.GradDate = DateOnly.TryParse(input, out var graddate) ? graddate : null;
+                        DateOnly? graddate = null;
+                        while (true){
+                            Console.Write("Enter physician's grad date (mm/dd/yyyy) (optional, press Enter to skip): ");
+                            input = Console.ReadLine();
+
+                            if (string.IsNullOrWhiteSpace(input)) {
+                                // User skipped
+                                break;
+                            }
+
+                            if (DateOnly.TryParse(input, out DateOnly date)){
+                                birthdate = date;
+                                break;
+                            }
+                            else{
+                                Console.WriteLine("Invalid date format! Please use (mm/dd/yyyy).\n");
+                            }
+                        }
+                        physician.GradDate = graddate;
                         
                         physician.Specializations ??= new List<string>();
                         Console.WriteLine("Enter specializations one by one (press Enter on an empty line to finish):");
@@ -122,27 +157,149 @@ namespace CLI.Clinic
 
                             physician.Specializations.Add(input);
                         }
-                        
+                        physicians.Add(physician);
                         Console.WriteLine("Physician Added");
 
                         break;
                     case "A": 
                     case "a":
+
+                        var appointment = new Appointment();
+                        input = null;
+                        var foundId = false;
+                        while (true){
+                            Console.WriteLine("Select the id of the physician (format is Id. Name)");
+                            Console.WriteLine("Physicians: ");
+                            foreach(var ph in physicians){
+                                Console.WriteLine(ph);
+                            }
+                            input = Console.ReadLine();
+                            foreach(var ph in physicians){
+                                if (input == ph.LicenseNumber){
+                                    foundId = true;
+                                }
+                            }
+                            if(foundId){
+                                break;
+                            }
+                            else{
+                                Console.WriteLine("Id not found try again");
+                            }
+                        }
+                        appointment.PhysicianId =  int.Parse(input);;
+
+
+                        input = null;
+                        foundId = false;
+                        while (true){
+                            Console.WriteLine("Select the id of the patient (format is Id. Name)");
+                            Console.WriteLine("Patients: ");
+                            foreach(var p in patients){
+                                Console.WriteLine(p);
+                            }
+                            input = Console.ReadLine();
+                            foreach(var p in patients){
+                                if (int.Parse(input) == p.Id){
+                                    foundId = true;
+                                }
+                            }
+                            if(foundId){
+                                break;
+                            }
+                            else{
+                                Console.WriteLine("Id not found try again");
+                            }
+                        }
+                        appointment.PatientId = int.Parse(input);
+
+                        var unavailable = true;
+
+                        while(unavailable){
+                            Console.WriteLine("Select the date and time of the appointment");
+                            int year, month, day;
+
+                            while (true){
+                                Console.Write("Enter the year of appointment: ");
+                                string y = Console.ReadLine();
+                                if (int.TryParse(y, out year) && year > 0){
+                                    break;
+                                }
+                                else{
+                                    Console.WriteLine("Invalid year! Please enter a valid year.");
+                                }
+                            }
+
+                            while (true){
+                                Console.Write("Enter the month of appointment as a number (e.g. April -> 4): ");
+                                string m = Console.ReadLine();
+                                if (int.TryParse(m, out month) && month >= 1 && month <= 12){
+                                    break;
+                                }
+                                else{
+                                    Console.WriteLine("Invalid month! Please enter a number between 1 and 12.");
+                                }
+                            }
+
+                            while (true){
+                                Console.Write("Enter the day of appointment: ");
+                                string d = Console.ReadLine();
+                                if (int.TryParse(d, out day) && day >= 1 && day <= DateTime.DaysInMonth(year, month)){
+                                    break;
+                                }
+                                else{
+                                    Console.WriteLine("Invalid day! Please enter a valid day for that month.");
+                                }
+                            }
+
+                            TimeOnly time = default;
+                            var validTime = false;
+                            while (!validTime)
+                            {
+                                Console.WriteLine("Enter the time of appointment (e.g. 3:45 PM): ");
+                                string t = Console.ReadLine();
+
+                                if (TimeOnly.TryParse(t, out time)){
+                                    validTime = true; 
+                                }
+                                else{
+                                    Console.WriteLine("Invalid time format! Please try again.\n");
+                                }
+                            }
+                            DateTime appointmentTime = new DateTime(year, month, day, time.Hour, time.Minute, time.Second);
+                            
+                            var overlap = false;
+
+                            foreach(var a in appointments){
+                                if(a.Date == appointmentTime){
+                                    overlap = true;
+                                    break;
+                                }
+                            }
+                            if(!overlap) {
+                                appointment.Date = appointmentTime;
+                                appointments.Add(appointment);
+                                Console.WriteLine("Appointment Added");
+                                unavailable = false;
+                            }
+                            else{
+                                Console.WriteLine("Appointment Not Added (Doctor is not available then)");
+                            }
+                        }
                         break;
                     case "L": 
                     case "l":
 
                         Console.WriteLine("Patients: ");
-                        foreach(var patient in patients){
-                            Console.WriteLine(patient);
+                        foreach(var p in patients){
+                            Console.WriteLine(p);
                         }
                         Console.WriteLine("Physicians: ");
-                        foreach(var physicians in physicians){
-                            Console.WriteLine(physicians);
+                        foreach(var ph in physicians){
+                            Console.WriteLine(ph);
                         }
                         Console.WriteLine("Appointments: ");
-                        foreach(var appointment in appointments){
-                            Console.WriteLine(appointment);
+                        foreach(var a in appointments){
+                            Console.WriteLine(a);
                         }
                         break;
                     case "Q": 

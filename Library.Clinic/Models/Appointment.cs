@@ -5,7 +5,10 @@ namespace Library.Clinic.Models
         // Basic Demographics
         public DateTime? Date { get; set; }
         public int PatientId {  get; set; }
+        public int PatientName {  get; set; }
         public int PhysicianId { get; set; }
+        public int PhysicianName { get; set; }
+
 
 
         public List<string>? Specializations { get; set; } = new List<string>();
@@ -13,7 +16,7 @@ namespace Library.Clinic.Models
 
         public override string ToString()
         {
-            return $"Physician: {PhysicianId} and Patient: {PatientId} at {Date}";
+            return $"Physician: {PhysicianId}. {PhysicianName} and Patient: {PatientId}. {PatientName} at {Date}";
         }
 
     }
