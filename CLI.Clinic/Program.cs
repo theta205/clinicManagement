@@ -8,10 +8,11 @@ namespace CLI.Clinic
     {
         static void Main(string[] args)
         {
-             Console.WriteLine("Welcome to CLinic!");
+            Console.WriteLine("Welcome to CLinic!");
             List<Patient?> patients = new List<Patient?>();
             List<Physician?> physicians = new List<Physician?>();
             List<Appointment?> appointments = new List<Appointment?>();
+
             bool cont = true;
             do
             {
@@ -166,6 +167,7 @@ namespace CLI.Clinic
 
                         var appointment = new Appointment();
                         input = null;
+
                         var foundId = false;
                         while (true){
                             Console.WriteLine("Select the id of the physician (format is Id. Name)");
@@ -175,8 +177,9 @@ namespace CLI.Clinic
                             }
                             input = Console.ReadLine();
                             foreach(var ph in physicians){
-                                if (input == ph.LicenseNumber){
+                                if (input != null && input == ph.LicenseNumber){
                                     foundId = true;
+                                    appointment.PhysicianName = ph.Name;
                                 }
                             }
                             if(foundId){
@@ -187,7 +190,7 @@ namespace CLI.Clinic
                             }
                         }
                         appointment.PhysicianId =  int.Parse(input);;
-
+                        var PhysicianIdForAppointment = appointment.PhysicianId;
 
                         input = null;
                         foundId = false;
@@ -201,6 +204,7 @@ namespace CLI.Clinic
                             foreach(var p in patients){
                                 if (int.Parse(input) == p.Id){
                                     foundId = true;
+                                    appointment.PatientName = p.Name;
                                 }
                             }
                             if(foundId){
@@ -221,7 +225,7 @@ namespace CLI.Clinic
                             while (true){
                                 Console.Write("Enter the year of appointment: ");
                                 string y = Console.ReadLine();
-                                if (int.TryParse(y, out year) && year > 0){
+                                if (int.TryParse(y, out year) && year >= 2025){
                                     break;
                                 }
                                 else{
@@ -253,24 +257,31 @@ namespace CLI.Clinic
 
                             TimeOnly time = default;
                             var validTime = false;
-                            while (!validTime)
-                            {
-                                Console.WriteLine("Enter the time of appointment (e.g. 3:45 PM): ");
-                                string t = Console.ReadLine();
+                            while (!validTime){
+                            Console.Write("Enter the time of appointment (e.g. 3:45 PM): ");
+                            string t = Console.ReadLine();
 
-                                if (TimeOnly.TryParse(t, out time)){
-                                    validTime = true; 
+                            if (TimeOnly.TryParse(t, out time)){
+                                TimeOnly start = new TimeOnly(9, 0);   // 9:00 AM
+                                TimeOnly end = new TimeOnly(17, 0);    // 5:00 PM
+
+                                if (time >= start && time <= end){
+                                    validTime = true;
                                 }
                                 else{
-                                    Console.WriteLine("Invalid time format! Please try again.\n");
+                                    Console.WriteLine("Time must be between 9:00 AM and 5:00 PM. Please try again.\n");
                                 }
                             }
+                            else{
+                                Console.WriteLine("Invalid time format! Please try again.\n");
+                            }
+                        }
                             DateTime appointmentTime = new DateTime(year, month, day, time.Hour, time.Minute, time.Second);
                             
                             var overlap = false;
 
                             foreach(var a in appointments){
-                                if(a.Date == appointmentTime){
+                                if(a.Date == appointmentTime && a.PhysicianId == PhysicianIdForAppointment){
                                     overlap = true;
                                     break;
                                 }
