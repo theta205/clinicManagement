@@ -111,15 +111,37 @@ public class PatientViewModel : INotifyPropertyChanged
         }
         LoadPatients();
     }
-    
-    public Task LoadPatients()
+        
+    public async Task LoadPatients()
     {
-        Patients.Clear();
-        foreach (var patient in _patients.OrderBy(p => p.Name))
+        if (IsBusy) return;
+        
+        IsBusy = true;
+        
+        try
         {
-            Patients.Add(patient);
+            await Task.Run(() =>
+            {
+                var patients = _patients.OrderBy(p => p.Name).ToList();
+                
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    Patients.Clear();
+                    foreach (var patient in patients)
+                    {
+                        Patients.Add(patient);
+                    }
+                });
+            });
         }
-        return Task.CompletedTask;
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load patients: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
     
     private void ToggleEdit()
@@ -167,50 +189,60 @@ public class PatientViewModel : INotifyPropertyChanged
             
         if (confirm)
         {
-            _patients.RemoveAll(p => p.Id == patient.Id);
-            await LoadPatients();
+            var patientToRemove = _patients.FirstOrDefault(p => p.Id == patient.Id);
+            if (patientToRemove != null)
+            {
+                _patients.Remove(patientToRemove);
+                await LoadPatients();
+            }
         }
     }
     
     private async Task Save()
+{
+    if (IsBusy || !CanSave()) return;
+    
+    IsBusy = true;
+    
+    try
     {
-        if (IsBusy) return;
-        
-        IsBusy = true;
-        
-        try
+        var patient = new Patient
         {
-            var patient = new Patient
-            {
-                Id = Id == 0 ? _nextId++ : Id,
-                Name = Name,
-                BirthDate = BirthDate,
-                Gender = Gender,
-                Race = Race,
-                Address = Address
-            };
-            
-            if (Id == 0)
-            {
-                _patients.Add(patient);
-            }
-            else
-            {
-                var index = _patients.FindIndex(p => p.Id == Id);
-                if (index >= 0)
-                {
-                    _patients[index] = patient;
-                }
-            }
-            
-            await LoadPatients();
-            IsEditing = false;
-        }
-        finally
+            Id = Id == 0 ? _nextId++ : Id,
+            Name = Name,
+            BirthDate = BirthDate,
+            Gender = Gender,
+            Race = Race,
+            Address = Address
+        };
+        
+        if (Id == 0)
         {
-            IsBusy = false;
+            _patients.Add(patient);
+            await Application.Current.MainPage.DisplayAlert("Success", "Patient added successfully", "OK");
         }
+        else
+        {
+            var index = _patients.FindIndex(p => p.Id == Id);
+            if (index >= 0)
+            {
+                _patients[index] = patient;
+                await Application.Current.MainPage.DisplayAlert("Success", "Patient updated successfully", "OK");
+            }
+        }
+        
+        await LoadPatients();
+        IsEditing = false;
     }
+    catch (Exception ex)
+    {
+        await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+    }
+    finally
+    {
+        IsBusy = false;
+    }
+}
     
     private bool CanSave() => 
         !string.IsNullOrWhiteSpace(Name);

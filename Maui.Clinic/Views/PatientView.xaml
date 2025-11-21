@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:Maui.Clinic.ViewModels"
-             x:Class="Maui.Clinic.Views.PatientView"
-             x:DataType="viewmodels:PatientViewModel"
-             Title="{Binding Title}">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Maui.Clinic.ViewModels"
+    xmlns:model="clr-namespace:Library.Clinic.Models;assembly=Library.Clinic"
+    x:Class="Maui.Clinic.Views.PatientView"
+    x:DataType="viewmodels:PatientViewModel"
+    Title="{Binding Title}">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
             <!-- Patient List -->
@@ -15,31 +17,31 @@
                             HorizontalOptions="Start"/>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <SwipeView>
-                            <SwipeView.RightItems>
-                                <SwipeItems>
-                                    <SwipeItem Text="Edit"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditPatientCommand}"
-                                             CommandParameter="{Binding .}"/>
-                                    <SwipeItem Text="Delete"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePatientCommand}"
-                                             CommandParameter="{Binding .}"
-                                             BackgroundColor="Red"/>
-                                </SwipeItems>
-                            </SwipeView.RightItems>
-                            <Frame Padding="10" Margin="5">
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Name}" 
-                                           FontAttributes="Bold" 
-                                           FontSize="16"/>
-                                    <Label Text="{Binding BirthDate, StringFormat='{0:d}'}"
-                                           TextColor="{StaticResource Gray600}"/>
-                                </VerticalStackLayout>
-                            </Frame>
-                        </SwipeView>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Patient">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Edit"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditPatientCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                <SwipeItem Text="Delete"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeletePatientCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="Red"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Frame Padding="10" Margin="5">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" 
+                                    FontAttributes="Bold" 
+                                    FontSize="16"/>
+                                <Label Text="{Binding BirthDate, StringFormat='{0:d}'}"
+                                    TextColor="{StaticResource Gray600}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
             </CollectionView>
 
             <!-- Edit Form (initially hidden) -->
