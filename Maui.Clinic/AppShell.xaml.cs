@@ -1,9 +1,11 @@
-﻿namespace Maui.Clinic;
+﻿using Maui.Clinic.Views;
+
+namespace Maui.Clinic;
 
 public partial class AppShell : Shell
 {
-	public AppShell()
-	{
-		InitializeComponent();
-	}
+    public AppShell()
+    {
+        InitializeComponent();
+    }
 }

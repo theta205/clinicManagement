@@ -1,1 +1,1 @@
-dotnet run --project "/Users/isaiahrohrer/Documents/csprojects/MyApp/CLI.Clinic/CLI.Clinic.csproj"
+dotnet clean "/Users/isaiahrohrer/Documents/csprojects/MyApp/Maui.Clinic/Maui.Clinic.csproj" && dotnet build -t:Run -f net9.0-maccatalyst "/Users/isaiahrohrer/Documents/csprojects/MyApp/Maui.Clinic/Maui.Clinic.csproj"

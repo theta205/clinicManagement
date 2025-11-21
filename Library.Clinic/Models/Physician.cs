@@ -5,7 +5,8 @@ namespace Library.Clinic.Models
         // Basic Demographics
         public string? Name { get; set; }
         public DateOnly? GradDate {  get; set; }
-        public string LicenseNumber { get; set; }
+        public string LicenseNumber { get; set; } = string.Empty;
+
 
 
         public List<string>? Specializations { get; set; } = new List<string>();
