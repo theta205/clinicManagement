@@ -82,7 +82,7 @@ namespace App.Clinic.ViewModels
             if (Id > 0)
             {
                 PatientServiceProxy.Current.DeletePatient(Id);
-                Shell.Current.GoToAsync("//Patients");
+                Shell.Current.GoToAsync("///PatientManagement");
             }
         }
 
@@ -93,7 +93,7 @@ namespace App.Clinic.ViewModels
                 return;
             }
             var selectedPatientId = pvm?.Id ?? 0;
-            Shell.Current.GoToAsync($"//PatientDetails?patientId={selectedPatientId}");
+            Shell.Current.GoToAsync($"/PatientDetails?patientId={selectedPatientId}");
         }
 
         public PatientViewModel()
@@ -117,7 +117,7 @@ namespace App.Clinic.ViewModels
                 .AddOrUpdatePatient(Model);
             }
 
-            await Shell.Current.GoToAsync("//Patients");
+            await Shell.Current.GoToAsync("///PatientManagement");
         }
     }
 }

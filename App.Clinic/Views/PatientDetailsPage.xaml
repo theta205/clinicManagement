@@ -24,17 +24,19 @@
             <!-- Patient ID (Read-only for existing patients) -->
             <Frame BackgroundColor="LightGray" Padding="15" CornerRadius="10">
                 <StackLayout>
-                    <Label Text="Patient ID" FontAttributes="Bold" />
-                    <Label Text="{Binding Id}" />
+                    <Label Text="Patient ID" FontAttributes="Bold" TextColor="Black" />
+                    <Label Text="{Binding Id}" TextColor="Black" />
                 </StackLayout>
             </Frame>
             
             <!-- Name Entry -->
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
-                    <Label Text="Name *" FontAttributes="Bold" />
+                    <Label Text="Name *" FontAttributes="Bold" TextColor="Black" />
                     <Entry Text="{Binding Name}"
                            Placeholder="Enter patient name"
+                           TextColor="Black"
+                           PlaceholderColor="Gray"
                            MaxLength="100" />
                 </StackLayout>
             </Frame>
@@ -42,9 +44,11 @@
             <!-- SSN Entry -->
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
-                    <Label Text="SSN *" FontAttributes="Bold" />
+                    <Label Text="SSN *" FontAttributes="Bold" TextColor="Black" />
                     <Entry Text="{Binding SSN}"
                            Placeholder="Enter SSN (e.g. 123-45-6789)"
+                           TextColor="Black"
+                           PlaceholderColor="Gray"
                            MaxLength="11"
                            Keyboard="Numeric" />
                 </StackLayout>
@@ -53,17 +57,19 @@
             <!-- Birth Date Picker -->
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
-                    <Label Text="Birth Date *" FontAttributes="Bold" />
-                    <DatePicker Date="{Binding BirthDate}" />
+                    <Label Text="Birth Date *" FontAttributes="Bold" TextColor="Black" />
+                    <DatePicker Date="{Binding BirthDate}" TextColor="Black" BackgroundColor="LightGray" />
                 </StackLayout>
             </Frame>
             
             <!-- Address Entry -->
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
-                    <Label Text="Address" FontAttributes="Bold" />
+                    <Label Text="Address" FontAttributes="Bold" TextColor="Black" />
                     <Editor Text="{Binding Address}"
                             Placeholder="Enter patient address (optional)"
+                            TextColor="Black"
+                            PlaceholderColor="Gray"
                             HeightRequest="80"
                             MaxLength="500" />
                 </StackLayout>

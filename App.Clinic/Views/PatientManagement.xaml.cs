@@ -13,7 +13,7 @@ public partial class PatientManagementPage : ContentPage
     {
         if (sender is Button button && button.BindingContext is PatientViewModel patient)
         {
-            await Shell.Current.GoToAsync($"//PatientDetails?patientId={patient.Id}");
+            await Shell.Current.GoToAsync($"/PatientDetails?patientId={patient.Id}");
         }
     }
 

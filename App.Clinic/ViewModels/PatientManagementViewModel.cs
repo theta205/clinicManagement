@@ -122,14 +122,21 @@ namespace App.Clinic.ViewModels
 
         private async void DoAdd()
         {
-            await Shell.Current.GoToAsync("//PatientDetails");
+            try
+            {
+                await Shell.Current.GoToAsync("/PatientDetails");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Navigation failed: {ex.Message}", "OK");
+            }
         }
 
         private async void DoEdit()
         {
             if (SelectedPatient != null)
             {
-                await Shell.Current.GoToAsync($"//PatientDetails?patientId={SelectedPatient.Id}");
+                await Shell.Current.GoToAsync($"/PatientDetails?patientId={SelectedPatient.Id}");
             }
         }
 

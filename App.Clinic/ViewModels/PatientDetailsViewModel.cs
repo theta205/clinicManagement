@@ -15,8 +15,16 @@ namespace App.Clinic.ViewModels
             _patient = new PatientDTO();
             _isNewPatient = true;
             
-            SaveCommand = new Command(async () => await SavePatient());
+            SaveCommand = new Command(async () => await SavePatient(), CanSave);
             CancelCommand = new Command(async () => await Cancel());
+        }
+
+        private bool CanSave()
+        {
+            return _patient != null && 
+                   !string.IsNullOrWhiteSpace(_patient.Name) && 
+                   !string.IsNullOrWhiteSpace(_patient.SSN) &&
+                   _patient.BirthDate != default;
         }
 
         public int Id
@@ -41,6 +49,7 @@ namespace App.Clinic.ViewModels
                 {
                     _patient.Name = value;
                     OnPropertyChanged();
+                    ((Command)SaveCommand).ChangeCanExecute();
                 }
             }
         }
@@ -54,6 +63,7 @@ namespace App.Clinic.ViewModels
                 {
                     _patient.SSN = value;
                     OnPropertyChanged();
+                    ((Command)SaveCommand).ChangeCanExecute();
                 }
             }
         }
@@ -67,6 +77,7 @@ namespace App.Clinic.ViewModels
                 {
                     _patient.BirthDate = value;
                     OnPropertyChanged();
+                    ((Command)SaveCommand).ChangeCanExecute();
                 }
             }
         }
@@ -109,16 +120,34 @@ namespace App.Clinic.ViewModels
 
         private async Task SavePatient()
         {
-            if (_patient != null)
+            try
             {
-                await PatientServiceProxy.Current.AddOrUpdatePatient(_patient);
-                await Shell.Current.GoToAsync("//Patients");
+                if (_patient != null && CanSave())
+                {
+                    var result = await PatientServiceProxy.Current.AddOrUpdatePatient(_patient);
+                    if (result != null)
+                    {
+                        await Shell.Current.GoToAsync("/PatientManagement");
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("Error", "Failed to save patient. Please try again.", "OK");
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Validation Error", "Please fill in all required fields (Name, SSN, and Birth Date).", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
             }
         }
 
         private async Task Cancel()
         {
-            await Shell.Current.GoToAsync("//Patients");
+            await Shell.Current.GoToAsync("/PatientManagement");
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -34,10 +34,14 @@ namespace Library.Clinic.Services
         {
             instance = null;
             
-            // Initialize with empty list to avoid blocking
-            Patients = new List<PatientDTO>();
+            // Initialize with sample data to avoid blocking
+            Patients = new List<PatientDTO> {
+                new PatientDTO { Id = 1, Name = "John Doe", SSN = "123-45-6789", BirthDate = new DateTime(1980, 1, 15), Address = "123 Main St, Anytown, USA" },
+                new PatientDTO { Id = 2, Name = "Jane Smith", SSN = "987-65-4321", BirthDate = new DateTime(1990, 5, 22), Address = "456 Oak Ave, Somewhere, USA" },
+                new PatientDTO { Id = 3, Name = "Bob Johnson", SSN = "456-78-9012", BirthDate = new DateTime(1975, 8, 10), Address = "789 Pine Rd, Nowhere, USA" }
+            };
             
-            // Load data asynchronously without blocking
+            // Try to load data asynchronously without blocking
             _ = LoadPatientsAsync();
         }
 
@@ -85,38 +89,95 @@ namespace Library.Clinic.Services
         }
 
         public async Task<List<PatientDTO>> Search(string query) {
+            try
+            {
+                var patientsPayload = await new WebRequestHandler()
+                    .Post("/Patient/Search", new Query(query));
 
-            var patientsPayload = await new WebRequestHandler()
-                .Post("/Patient/Search", new Query(query));
-
-            Patients = JsonConvert.DeserializeObject<List<PatientDTO>>(patientsPayload)
-                ?? new List<PatientDTO>();
+                Patients = JsonConvert.DeserializeObject<List<PatientDTO>>(patientsPayload)
+                    ?? new List<PatientDTO>();
+            }
+            catch (Exception)
+            {
+                // Fallback to local search if web service fails
+                if (string.IsNullOrWhiteSpace(query))
+                {
+                    // If query is empty, load all patients
+                    Patients = Patients.ToList(); // Reset to full list
+                }
+                else
+                {
+                    // Filter locally
+                    Patients = Patients
+                        .Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                                   p.SSN.Contains(query, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                }
+            }
 
             return Patients;
         }
 
         public async Task<PatientDTO?> AddOrUpdatePatient(PatientDTO patient)
         {
-            var payload = await new WebRequestHandler().Post("/patient", patient);
-            var newPatient = JsonConvert.DeserializeObject<PatientDTO>(payload);
-            if(newPatient != null && newPatient.Id > 0 && patient.Id == 0)
+            try
             {
-                //new patient to be added to the list
-                Patients.Add(newPatient);
-            } else if(newPatient != null && patient != null && patient.Id > 0 && patient.Id == newPatient.Id)
-            {
-                //edit, exchange the object in the list
-                var currentPatient = Patients.FirstOrDefault(p => p.Id == newPatient.Id);
-                var index = Patients.Count;
-                if (currentPatient != null)
+                // Try web service first
+                var payload = await new WebRequestHandler().Post("/patient", patient);
+                var newPatient = JsonConvert.DeserializeObject<PatientDTO>(payload);
+                
+                if(newPatient != null && newPatient.Id > 0 && patient.Id == 0)
                 {
-                    index = Patients.IndexOf(currentPatient);
-                    Patients.RemoveAt(index);
+                    //new patient to be added to the list
+                    Patients.Add(newPatient);
+                } else if(newPatient != null && patient != null && patient.Id > 0 && patient.Id == newPatient.Id)
+                {
+                    //edit, exchange the object in the list
+                    var currentPatient = Patients.FirstOrDefault(p => p.Id == newPatient.Id);
+                    var index = Patients.Count;
+                    if (currentPatient != null)
+                    {
+                        index = Patients.IndexOf(currentPatient);
+                        Patients.RemoveAt(index);
+                    }
+                    Patients.Insert(index, newPatient);
                 }
-                Patients.Insert(index, newPatient);
+                
+                return newPatient;
             }
+            catch (Exception)
+            {
+                // Fallback to local storage if web service fails
+                return AddOrUpdatePatientLocal(patient);
+            }
+        }
 
-            return newPatient;
+        private PatientDTO? AddOrUpdatePatientLocal(PatientDTO patient)
+        {
+            if(patient.Id == 0)
+            {
+                // New patient - assign ID and add to list
+                patient.Id = LastKey + 1;
+                Patients.Add(patient);
+            }
+            else
+            {
+                // Existing patient - update in list
+                var existingPatient = Patients.FirstOrDefault(p => p.Id == patient.Id);
+                if (existingPatient != null)
+                {
+                    var index = Patients.IndexOf(existingPatient);
+                    Patients.RemoveAt(index);
+                    Patients.Insert(index, patient);
+                }
+                else
+                {
+                    // Patient not found, add it
+                    Patients.Add(patient);
+                }
+            }
+            
+            return patient;
         }
 
         public async void DeletePatient(int id) {
@@ -126,7 +187,16 @@ namespace Library.Clinic.Services
             {
                 Patients.Remove(patientToRemove);
 
-                await new WebRequestHandler().Delete($"/Patient/{id}");
+                try
+                {
+                    // Try web service delete
+                    await new WebRequestHandler().Delete($"/Patient/{id}");
+                }
+                catch (Exception)
+                {
+                    // Fallback to local only - patient already removed from list
+                    // No action needed as we already removed from local list
+                }
             }
         }
     }
