@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace App.Clinic.ViewModels
 {
@@ -26,6 +27,11 @@ namespace App.Clinic.ViewModels
             };
 
             SortChoice = SortChoiceEnum.NameAscending;
+            
+            AddCommand = new Command(DoAdd);
+            EditCommand = new Command(DoEdit);
+            SearchCommand = new Command(DoSearch);
+            DeleteCommand = new Command(DoDelete);
         }
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -54,6 +60,11 @@ namespace App.Clinic.ViewModels
 
         public PatientViewModel? SelectedPatient { get; set; }
         public string? Query { get; set; }
+        
+        public ICommand AddCommand { get; private set; }
+        public ICommand EditCommand { get; private set; }
+        public ICommand SearchCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
         public ObservableCollection<PatientViewModel> Patients
         {
             get
@@ -97,11 +108,34 @@ namespace App.Clinic.ViewModels
 
         public async void Search()
         {
+            DoSearch();
+        }
+
+        private void DoSearch()
+        {
             if (Query != null)
             {
-                await PatientServiceProxy.Current.Search(Query);
+                Task.Run(async () => await PatientServiceProxy.Current.Search(Query));
             }
             Refresh();
+        }
+
+        private async void DoAdd()
+        {
+            await Shell.Current.GoToAsync("//PatientDetails");
+        }
+
+        private async void DoEdit()
+        {
+            if (SelectedPatient != null)
+            {
+                await Shell.Current.GoToAsync($"//PatientDetails?patientId={SelectedPatient.Id}");
+            }
+        }
+
+        private void DoDelete()
+        {
+            Delete();
         }
     }
 }

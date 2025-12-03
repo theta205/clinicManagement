@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:App.Clinic.ViewModels"
+    x:Class="App.Clinic.Views.PatientDetailsPage"
+    x:DataType="viewmodels:PatientDetailsViewModel"
+    Title="Patient Details">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:PatientDetailsViewModel />
+    </ContentPage.BindingContext>
+    
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+            
+            <!-- Header -->
+            <Label Text="Patient Information"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20" />
+            
+            <!-- Patient ID (Read-only for existing patients) -->
+            <Frame BackgroundColor="LightGray" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Patient ID" FontAttributes="Bold" />
+                    <Label Text="{Binding Id}" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Name Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Name *" FontAttributes="Bold" />
+                    <Entry Text="{Binding Name}"
+                           Placeholder="Enter patient name"
+                           MaxLength="100" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- SSN Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="SSN *" FontAttributes="Bold" />
+                    <Entry Text="{Binding SSN}"
+                           Placeholder="Enter SSN (e.g. 123-45-6789)"
+                           MaxLength="11"
+                           Keyboard="Numeric" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Birth Date Picker -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Birth Date *" FontAttributes="Bold" />
+                    <DatePicker Date="{Binding BirthDate}" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Address Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Address" FontAttributes="Bold" />
+                    <Editor Text="{Binding Address}"
+                            Placeholder="Enter patient address (optional)"
+                            HeightRequest="80"
+                            MaxLength="500" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <StackLayout Orientation="Horizontal" 
+                         HorizontalOptions="Center"
+                         Spacing="20"
+                         Margin="0,20,0,0">
+                
+                <Button Text="Save"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="LightGreen"
+                        TextColor="Black"
+                        WidthRequest="100"
+                        HeightRequest="50" />
+                
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="LightCoral"
+                        TextColor="Black"
+                        WidthRequest="100"
+                        HeightRequest="50" />
+            </StackLayout>
+            
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

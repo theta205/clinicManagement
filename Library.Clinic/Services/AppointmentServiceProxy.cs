@@ -23,7 +23,7 @@ namespace Library.Clinic.Services
         }
         public List<Appointment> Appointments { get; private set; }
 
-        private static AppointmentServiceProxy _instance;
+        private static AppointmentServiceProxy _instance = null!;
         public static AppointmentServiceProxy Current
         {
             get

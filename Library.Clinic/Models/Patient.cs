@@ -12,14 +12,15 @@ namespace Library.Clinic.Models
 
         public static implicit operator DTO.PatientDTO(Patient patient)
         {
-            if (patient == null) return null;
+            if (patient == null) return null!;
             
             return new DTO.PatientDTO
             {
                 Id = patient.Id,
                 Name = patient.Name,
                 SSN = patient.SSN,
-                BirthDate = patient.BirthDate
+                BirthDate = patient.BirthDate,
+                Address = patient.Address
             };
         }
     }

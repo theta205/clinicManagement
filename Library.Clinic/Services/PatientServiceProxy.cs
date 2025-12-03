@@ -33,10 +33,29 @@ namespace Library.Clinic.Services
         private PatientServiceProxy()
         {
             instance = null;
+            
+            // Initialize with empty list to avoid blocking
+            Patients = new List<PatientDTO>();
+            
+            // Load data asynchronously without blocking
+            _ = LoadPatientsAsync();
+        }
 
-            var patientsData = new WebRequestHandler().Get("/Patient").Result;
-
-            Patients = JsonConvert.DeserializeObject<List<PatientDTO>>(patientsData) ?? new List<PatientDTO>();
+        private async Task LoadPatientsAsync()
+        {
+            try
+            {
+                var patientsData = await new WebRequestHandler().Get("/Patient");
+                var loadedPatients = JsonConvert.DeserializeObject<List<PatientDTO>>(patientsData) ?? new List<PatientDTO>();
+                
+                // Update the patients list on the main thread if needed
+                Patients = loadedPatients;
+            }
+            catch (Exception)
+            {
+                // If web request fails, keep the empty list
+                Patients = new List<PatientDTO>();
+            }
         }
         public int LastKey
         {
@@ -50,7 +69,7 @@ namespace Library.Clinic.Services
             }
         }
 
-        private List<PatientDTO> patients;
+        private List<PatientDTO> patients = new List<PatientDTO>();
         public List<PatientDTO> Patients {
             get {
                 return patients;

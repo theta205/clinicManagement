@@ -1,9 +1,5 @@
   Determining projects to restore...
   All projects are up-to-date for restore.
-/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Models/Patient.cs(15,41): warning CS8603: Possible null reference return. [/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Library.Clinic.csproj]
-/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/DTO/PatientDTO.cs(14,37): warning CS8603: Possible null reference return. [/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Library.Clinic.csproj]
-/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Services/PatientServiceProxy.cs(33,17): warning CS8618: Non-nullable field 'patients' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Library.Clinic.csproj]
-/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Services/AppointmentServiceProxy.cs(26,48): warning CS8618: Non-nullable field '_instance' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Library.Clinic.csproj]
   Library.Clinic -> /Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/bin/Debug/net9.0/Library.Clinic.dll
   Detected signing identity:
     Code Signing Key: "" (-)
@@ -13,20 +9,22 @@
 /Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/AppointmentViewModel.cs(25,41): warning CS8604: Possible null reference argument for parameter 'dto' in 'PatientDTO.implicit operator Patient(PatientDTO dto)'. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
 /Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/AppointmentViewModel.cs(39,24): warning CS8604: Possible null reference argument for parameter 'patient' in 'Patient.implicit operator PatientDTO(Patient patient)'. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
 /Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/AppointmentViewModel.cs(47,37): warning CS8604: Possible null reference argument for parameter 'dto' in 'PatientDTO.implicit operator Patient(PatientDTO dto)'. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
+/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/PatientDetailsViewModel.cs(90,27): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
+/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/PatientManagementViewModel.cs(109,27): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
+/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/PatientDetailsViewModel.cs(11,22): warning CS0414: The field 'PatientDetailsViewModel._isNewPatient' is assigned but its value is never used [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
   App.Clinic -> /Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/bin/Debug/net9.0-maccatalyst/maccatalyst-arm64/App.Clinic.dll
   Optimizing assemblies for size may change the behavior of the app. Be sure to test after publishing. See: https://aka.ms/dotnet-illink
   Optimizing assemblies for size. This process might take a while.
 
 Build succeeded.
 
-/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Models/Patient.cs(15,41): warning CS8603: Possible null reference return. [/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Library.Clinic.csproj]
-/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/DTO/PatientDTO.cs(14,37): warning CS8603: Possible null reference return. [/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Library.Clinic.csproj]
-/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Services/PatientServiceProxy.cs(33,17): warning CS8618: Non-nullable field 'patients' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Library.Clinic.csproj]
-/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Services/AppointmentServiceProxy.cs(26,48): warning CS8618: Non-nullable field '_instance' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [/Users/isaiahrohrer/Documents/csprojects/MyApp/Library.Clinic/Library.Clinic.csproj]
 /Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/AppointmentViewModel.cs(25,41): warning CS8604: Possible null reference argument for parameter 'dto' in 'PatientDTO.implicit operator Patient(PatientDTO dto)'. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
 /Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/AppointmentViewModel.cs(39,24): warning CS8604: Possible null reference argument for parameter 'patient' in 'Patient.implicit operator PatientDTO(Patient patient)'. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
 /Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/AppointmentViewModel.cs(47,37): warning CS8604: Possible null reference argument for parameter 'dto' in 'PatientDTO.implicit operator Patient(PatientDTO dto)'. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
-    7 Warning(s)
+/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/PatientDetailsViewModel.cs(90,27): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
+/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/PatientManagementViewModel.cs(109,27): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
+/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/ViewModels/PatientDetailsViewModel.cs(11,22): warning CS0414: The field 'PatientDetailsViewModel._isNewPatient' is assigned but its value is never used [/Users/isaiahrohrer/Documents/csprojects/MyApp/App.Clinic/App.Clinic.csproj::TargetFramework=net9.0-maccatalyst]
+    6 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:10.06
+Time Elapsed 00:00:08.36

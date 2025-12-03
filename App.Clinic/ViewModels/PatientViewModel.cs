@@ -47,6 +47,30 @@ namespace App.Clinic.ViewModels
             }
         }
 
+        public string SSN
+        {
+            get => Model?.SSN ?? string.Empty;
+            set
+            {
+                if(Model != null)
+                {
+                    Model.SSN = value;
+                }
+            }
+        }
+
+        public DateTime BirthDate
+        {
+            get => Model?.BirthDate ?? DateTime.Now;
+            set
+            {
+                if(Model != null)
+                {
+                    Model.BirthDate = value;
+                }
+            }
+        }
+
         public void SetupCommands()
         {
             DeleteCommand = new Command(DoDelete);
