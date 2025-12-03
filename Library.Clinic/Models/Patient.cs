@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Library.Clinic.Models
 {
@@ -7,16 +6,21 @@ namespace Library.Clinic.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
+        public string SSN { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
-        public string Gender { get; set; } = string.Empty;
-        public string Race { get; set; } = string.Empty;
-        public List<string> Diagnoses { get; set; } = new();
-        public List<string> Prescriptions { get; set; } = new();
-        public override string ToString()
-        {
-            return $"{Id}. {Name}";
-        }
+        public string? Address { get; set; }
 
+        public static implicit operator DTO.PatientDTO(Patient patient)
+        {
+            if (patient == null) return null;
+            
+            return new DTO.PatientDTO
+            {
+                Id = patient.Id,
+                Name = patient.Name,
+                SSN = patient.SSN,
+                BirthDate = patient.BirthDate
+            };
+        }
     }
 }

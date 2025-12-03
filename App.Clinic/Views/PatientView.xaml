@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:App.Clinic.ViewModels"
+    x:Class="App.Clinic.Views.PatientPage"
+    x:DataType="viewmodels:PatientViewModel"
+    Title="Patient Details">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:PatientViewModel />
+    </ContentPage.BindingContext>
+    
+    <Label Text="Patient Details" 
+           HorizontalOptions="Center" 
+           VerticalOptions="Center" />
+</ContentPage>

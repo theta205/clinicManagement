@@ -1,4 +1,4 @@
-﻿namespace Maui.Clinic;
+﻿namespace App.Clinic;
 
 public partial class MainPage : ContentPage
 {
