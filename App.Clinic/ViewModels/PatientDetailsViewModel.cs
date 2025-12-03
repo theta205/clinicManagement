@@ -127,7 +127,7 @@ namespace App.Clinic.ViewModels
                     var result = await PatientServiceProxy.Current.AddOrUpdatePatient(_patient);
                     if (result != null)
                     {
-                        await Shell.Current.GoToAsync("/PatientManagement");
+                        await Shell.Current.GoToAsync("///PatientManagement");
                     }
                     else
                     {
@@ -147,7 +147,7 @@ namespace App.Clinic.ViewModels
 
         private async Task Cancel()
         {
-            await Shell.Current.GoToAsync("/PatientManagement");
+            await Shell.Current.GoToAsync("///PatientManagement");
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
