@@ -9,6 +9,17 @@ public partial class PatientManagementPage : ContentPage
         InitializeComponent();
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        
+        // Refresh the patient list when the page appears
+        if (BindingContext is PatientManagementViewModel viewModel)
+        {
+            viewModel.Refresh();
+        }
+    }
+
     private async void OnEditClicked(object sender, EventArgs e)
     {
         if (sender is Button button && button.BindingContext is PatientViewModel patient)
