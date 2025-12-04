@@ -15,19 +15,22 @@ public partial class PhysicianDetailsPage : ContentPage
         
         if (BindingContext is PhysicianDetailsViewModel viewModel)
         {
-            // Get physician ID from navigation parameters
-            var navigationData = Shell.Current.CurrentState.Location.OriginalString;
+            // Get physician ID from navigation query parameters
             int physicianId = 0;
             
-            if (navigationData.Contains("physicianId="))
+            if (Shell.Current.CurrentState.Location.OriginalString.Contains("physicianId="))
             {
-                var startIndex = navigationData.IndexOf("physicianId=") + 12;
-                var endIndex = navigationData.IndexOf("&", startIndex);
-                if (endIndex == -1) endIndex = navigationData.Length;
+                var queryString = Shell.Current.CurrentState.Location.OriginalString;
+                var startIndex = queryString.IndexOf("physicianId=") + 12;
+                var endIndex = queryString.IndexOf("&", startIndex);
+                if (endIndex == -1) endIndex = queryString.Length;
                 
-                var idString = navigationData.Substring(startIndex, endIndex - startIndex);
+                var idString = queryString.Substring(startIndex, endIndex - startIndex);
                 int.TryParse(idString, out physicianId);
             }
+            
+            // Debug: Show the parsed ID
+            await Shell.Current.DisplayAlert("Debug", $"Parsed Physician ID: {physicianId}", "OK");
             
             await viewModel.LoadPhysician(physicianId);
         }

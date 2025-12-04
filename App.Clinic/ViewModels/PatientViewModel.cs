@@ -3,6 +3,7 @@ using Library.Clinic.Models;
 using Library.Clinic.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +11,18 @@ using System.Windows.Input;
 
 namespace App.Clinic.ViewModels
 {
-    public class PatientViewModel
+    public class PatientViewModel : INotifyPropertyChanged
     {
         public PatientDTO? Model { get; set; }
         public ICommand? DeleteCommand { get; set; }
         public ICommand? EditCommand { get; set; }
+        
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         public int Id
         {
             get
@@ -31,6 +39,7 @@ namespace App.Clinic.ViewModels
             {
                 if(Model != null && Model.Id != value) {
                     Model.Id = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -43,6 +52,7 @@ namespace App.Clinic.ViewModels
                 if(Model != null)
                 {
                     Model.Name = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -55,6 +65,7 @@ namespace App.Clinic.ViewModels
                 if(Model != null)
                 {
                     Model.SSN = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -67,6 +78,88 @@ namespace App.Clinic.ViewModels
                 if(Model != null)
                 {
                     Model.BirthDate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string? Address
+        {
+            get => Model?.Address;
+            set
+            {
+                if(Model != null)
+                {
+                    Model.Address = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Race
+        {
+            get => Model?.Race ?? string.Empty;
+            set
+            {
+                if(Model != null)
+                {
+                    Model.Race = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Gender
+        {
+            get => Model?.Gender ?? string.Empty;
+            set
+            {
+                if(Model != null)
+                {
+                    Model.Gender = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string DiagnosesText
+        {
+            get => Model != null ? string.Join(", ", Model.Diagnoses) : string.Empty;
+            set
+            {
+                if (Model != null)
+                {
+                    var newDiagnoses = value.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                           .Select(s => s.Trim())
+                                           .Where(s => !string.IsNullOrEmpty(s))
+                                           .ToList();
+                    
+                    if (!Model.Diagnoses.SequenceEqual(newDiagnoses))
+                    {
+                        Model.Diagnoses = newDiagnoses;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+        }
+
+        public string PrescriptionsText
+        {
+            get => Model != null ? string.Join(", ", Model.Prescriptions) : string.Empty;
+            set
+            {
+                if (Model != null)
+                {
+                    var newPrescriptions = value.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                               .Select(s => s.Trim())
+                                               .Where(s => !string.IsNullOrEmpty(s))
+                                               .ToList();
+                    
+                    if (!Model.Prescriptions.SequenceEqual(newPrescriptions))
+                    {
+                        Model.Prescriptions = newPrescriptions;
+                        OnPropertyChanged();
+                    }
                 }
             }
         }

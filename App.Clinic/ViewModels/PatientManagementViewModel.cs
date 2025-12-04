@@ -124,7 +124,7 @@ namespace App.Clinic.ViewModels
         {
             try
             {
-                await Shell.Current.GoToAsync("/PatientDetails");
+                await Shell.Current.GoToAsync("PatientDetails");
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace App.Clinic.ViewModels
         {
             if (SelectedPatient != null)
             {
-                await Shell.Current.GoToAsync($"/PatientDetails?patientId={SelectedPatient.Id}");
+                await Shell.Current.GoToAsync($"PatientDetails?patientId={SelectedPatient.Id}");
             }
         }
 

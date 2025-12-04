@@ -7,10 +7,6 @@
     x:DataType="viewmodels:PatientDetailsViewModel"
     Title="Patient Details">
     
-    <ContentPage.BindingContext>
-        <viewmodels:PatientDetailsViewModel />
-    </ContentPage.BindingContext>
-    
     <ScrollView>
         <StackLayout Padding="20" Spacing="20">
             
@@ -25,7 +21,7 @@
             <Frame BackgroundColor="LightGray" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Patient ID" FontAttributes="Bold" TextColor="Black" />
-                    <Label Text="{Binding Id}" TextColor="Black" />
+                    <Label Text="{Binding Patient.Id}" TextColor="Black" />
                 </StackLayout>
             </Frame>
             
@@ -33,7 +29,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Name *" FontAttributes="Bold" TextColor="Black" />
-                    <Entry Text="{Binding Name}"
+                    <Entry Text="{Binding Patient.Name}"
                            Placeholder="Enter patient name"
                            TextColor="Black"
                            PlaceholderColor="Gray"
@@ -45,7 +41,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="SSN *" FontAttributes="Bold" TextColor="Black" />
-                    <Entry Text="{Binding SSN}"
+                    <Entry Text="{Binding Patient.SSN}"
                            Placeholder="Enter SSN (e.g. 123-45-6789)"
                            TextColor="Black"
                            PlaceholderColor="Gray"
@@ -58,7 +54,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Birth Date *" FontAttributes="Bold" TextColor="Black" />
-                    <DatePicker Date="{Binding BirthDate}" TextColor="Black" BackgroundColor="LightGray" />
+                    <DatePicker Date="{Binding Patient.BirthDate}" TextColor="Black" BackgroundColor="White" FontFamily="Arial" />
                 </StackLayout>
             </Frame>
             
@@ -66,7 +62,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Address" FontAttributes="Bold" TextColor="Black" />
-                    <Editor Text="{Binding Address}"
+                    <Editor Text="{Binding Patient.Address}"
                             Placeholder="Enter patient address (optional)"
                             TextColor="Black"
                             PlaceholderColor="Gray"
@@ -79,7 +75,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Race" FontAttributes="Bold" TextColor="Black" />
-                    <Entry Text="{Binding Race}"
+                    <Entry Text="{Binding Patient.Race}"
                            Placeholder="Enter race"
                            TextColor="Black"
                            PlaceholderColor="Gray"
@@ -91,7 +87,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Gender" FontAttributes="Bold" TextColor="Black" />
-                    <Entry Text="{Binding Gender}"
+                    <Entry Text="{Binding Patient.Gender}"
                            Placeholder="Enter gender"
                            TextColor="Black"
                            PlaceholderColor="Gray"
@@ -103,7 +99,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Diagnoses" FontAttributes="Bold" TextColor="Black" />
-                    <Editor Text="{Binding DiagnosesText}"
+                    <Editor Text="{Binding Patient.DiagnosesText}"
                             Placeholder="Enter diagnoses (comma-separated)"
                             TextColor="Black"
                             PlaceholderColor="Gray"
@@ -116,7 +112,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Prescriptions" FontAttributes="Bold" TextColor="Black" />
-                    <Editor Text="{Binding PrescriptionsText}"
+                    <Editor Text="{Binding Patient.PrescriptionsText}"
                             Placeholder="Enter prescriptions (comma-separated)"
                             TextColor="Black"
                             PlaceholderColor="Gray"

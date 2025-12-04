@@ -148,7 +148,11 @@ public class PhysicianManagementViewModel: INotifyPropertyChanged
     {
         if (SelectedPhysician != null)
         {
-            await Shell.Current.GoToAsync($"/PhysicianDetails?physicianId={SelectedPhysician.Id}");
+            var parameters = new Dictionary<string, object>
+            {
+                { "physicianId", SelectedPhysician.Id }
+            };
+            await Shell.Current.GoToAsync("/PhysicianDetails", parameters);
         }
     }
 

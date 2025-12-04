@@ -57,7 +57,7 @@
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Graduation Date *" FontAttributes="Bold" TextColor="Black" />
-                    <DatePicker Date="{Binding GraduationDate}" TextColor="Black" BackgroundColor="LightGray" />
+                    <DatePicker Date="{Binding GraduationDate}" TextColor="Black" BackgroundColor="White" FontFamily="Arial" />
                 </StackLayout>
             </Frame>
             
