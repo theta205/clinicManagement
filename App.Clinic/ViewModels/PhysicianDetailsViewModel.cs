@@ -18,17 +18,24 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
     {
         _physician = new PhysicianDTO();
         _isNewPhysician = true;
-        
+
+        System.Diagnostics.Debug.WriteLine("[PhysicianDetails] ViewModel created, setting up commands");
         SaveCommand = new Command(async () => await SavePhysician(), CanSave);
         CancelCommand = new Command(async () => await Cancel());
     }
 
     private bool CanSave()
     {
-        return _physician != null && 
-               !string.IsNullOrWhiteSpace(_physician.Name) && 
-               !string.IsNullOrWhiteSpace(_physician.LicenseNumber) &&
-               _physician.GraduationDate != default;
+        var canSave = _physician != null &&
+                      !string.IsNullOrWhiteSpace(_physician.Name) &&
+                      !string.IsNullOrWhiteSpace(_physician.LicenseNumber) &&
+                      _physician.GraduationDate != default;
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[PhysicianDetails] CanSave: {canSave}, Name: '{_physician?.Name}', LicenseNumber: '{_physician?.LicenseNumber}', GraduationDate: {_physician?.GraduationDate}"
+        );
+
+        return canSave;
     }
 
     public int Id
@@ -97,7 +104,7 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
                                                .Select(s => s.Trim())
                                                .Where(s => !string.IsNullOrEmpty(s))
                                                .ToList();
-                
+
                 if (!_physician.Specializations.SequenceEqual(newSpecializations))
                 {
                     _physician.Specializations = newSpecializations;
@@ -114,7 +121,8 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
     {
         if (physicianId > 0)
         {
-            _physician = PhysicianServiceProxy.Current.Physicians.FirstOrDefault(p => p.Id == physicianId);
+            _physician = PhysicianServiceProxy.Current.Physicians
+                            .FirstOrDefault(p => p.Id == physicianId);
             _isNewPhysician = false;
         }
         else
@@ -128,9 +136,12 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(LicenseNumber));
         OnPropertyChanged(nameof(GraduationDate));
         OnPropertyChanged(nameof(SpecializationsText));
+
+        // 🔥 This is the required fix:
+        ((Command)SaveCommand).ChangeCanExecute();
     }
 
-    // Convenience entry point used by Shell navigation + QueryProperty
+    // Used by Shell navigation + QueryProperty
     public async Task Load()
     {
         await LoadPhysician(PhysicianId);
@@ -145,6 +156,7 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
                 var result = await PhysicianServiceProxy.Current.AddOrUpdatePhysician(_physician);
                 if (result != null)
                 {
+                    System.Diagnostics.Debug.WriteLine("Navigating to PhysicianManagement...");
                     await Shell.Current.GoToAsync("///PhysicianManagement");
                 }
                 else
@@ -154,7 +166,11 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
             }
             else
             {
-                await Shell.Current.DisplayAlert("Validation Error", "Please fill in all required fields (Name, License Number, and Graduation Date).", "OK");
+                await Shell.Current.DisplayAlert(
+                    "Validation Error",
+                    "Please fill in all required fields (Name, License Number, and Graduation Date).",
+                    "OK"
+                );
             }
         }
         catch (Exception ex)
@@ -165,6 +181,7 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
 
     private async Task Cancel()
     {
+        System.Diagnostics.Debug.WriteLine("Navigating to PhysicianManagement...");
         await Shell.Current.GoToAsync("///PhysicianManagement");
     }
 

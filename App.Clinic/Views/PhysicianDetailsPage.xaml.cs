@@ -6,6 +6,7 @@ public partial class PhysicianDetailsPage : ContentPage
 {
     public PhysicianDetailsPage()
     {
+        System.Diagnostics.Debug.WriteLine("[PhysicianDetailsPage] Constructor called");
         InitializeComponent();
         BindingContext = new PhysicianDetailsViewModel();
     }
@@ -13,6 +14,7 @@ public partial class PhysicianDetailsPage : ContentPage
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
+        System.Diagnostics.Debug.WriteLine("[PhysicianDetailsPage] OnNavigatedTo called");
 
         if (BindingContext is PhysicianDetailsViewModel viewModel)
         {

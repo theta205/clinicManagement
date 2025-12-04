@@ -24,7 +24,7 @@ public partial class PhysicianManagementPage : ContentPage
     {
         if (sender is Button button && button.BindingContext is PhysicianViewModel physician)
         {
-            await Shell.Current.GoToAsync($"/PhysicianDetails?physicianId={physician.Id}");
+            await Shell.Current.GoToAsync($"PhysicianDetails?physicianId={physician.Id}");
         }
     }
 

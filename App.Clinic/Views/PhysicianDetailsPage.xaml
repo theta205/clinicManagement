@@ -7,10 +7,6 @@
     x:DataType="viewmodels:PhysicianDetailsViewModel"
     Title="Physician Details">
     
-    <ContentPage.BindingContext>
-        <viewmodels:PhysicianDetailsViewModel />
-    </ContentPage.BindingContext>
-    
     <ScrollView>
         <StackLayout Padding="20" Spacing="20">
             
