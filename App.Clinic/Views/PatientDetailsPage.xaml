@@ -17,14 +17,6 @@
                    HorizontalOptions="Center"
                    Margin="0,0,0,20" />
             
-            <!-- Patient ID (Read-only for existing patients) -->
-            <Frame BackgroundColor="LightGray" Padding="15" CornerRadius="10">
-                <StackLayout>
-                    <Label Text="Patient ID" FontAttributes="Bold" TextColor="Black" />
-                    <Label Text="{Binding Patient.Id}" TextColor="Black" />
-                </StackLayout>
-            </Frame>
-            
             <!-- Name Entry -->
             <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
                 <StackLayout>
