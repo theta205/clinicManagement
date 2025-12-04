@@ -1,0 +1,326 @@
+using Library.Clinic.DTO;
+using Library.Clinic.Services;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+
+namespace App.Clinic.ViewModels;
+
+[QueryProperty(nameof(AppointmentId), "appointmentId")]
+public class AppointmentDetailsViewModel : INotifyPropertyChanged
+{
+    private AppointmentDTO? _appointment;
+    private bool _isNewAppointment;
+
+    public int AppointmentId { get; set; }
+
+    public AppointmentDetailsViewModel()
+    {
+        _appointment = new AppointmentDTO();
+        _isNewAppointment = true;
+        
+        System.Diagnostics.Debug.WriteLine("[AppointmentDetails] ViewModel created, setting up commands");
+        SaveCommand = new Command(async () => await SaveAppointment(), CanSave);
+        CancelCommand = new Command(async () => await Cancel());
+    }
+
+    private bool CanSave()
+    {
+        var canSave = _appointment != null && 
+               _appointment.PatientId > 0 && 
+               _appointment.PhysicianId > 0 &&
+               _appointment.Date != default &&
+               _appointment.StartTime != default &&
+               _appointment.EndTime != default &&
+               _appointment.StartTime < _appointment.EndTime;
+        
+        System.Diagnostics.Debug.WriteLine($"[AppointmentDetails] CanSave: {canSave}, PatientId: {_appointment?.PatientId}, PhysicianId: {_appointment?.PhysicianId}, Date: {_appointment?.Date}");
+        
+        return canSave;
+    }
+
+    public int Id
+    {
+        get => _appointment?.Id ?? 0;
+        set
+        {
+            if (_appointment != null && _appointment.Id != value)
+            {
+                _appointment.Id = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public DateTime Date
+    {
+        get => _appointment?.Date ?? DateTime.Today;
+        set
+        {
+            if (_appointment != null && _appointment.Date != value)
+            {
+                _appointment.Date = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(MinDate));
+                ((Command)SaveCommand).ChangeCanExecute();
+            }
+        }
+    }
+
+    public DateTime MinDate => DateTime.Today;
+
+    public DateTime StartTime
+    {
+        get => _appointment?.StartTime ?? DateTime.Now;
+        set
+        {
+            if (_appointment != null && _appointment.StartTime != value)
+            {
+                _appointment.StartTime = value;
+                OnPropertyChanged();
+                ((Command)SaveCommand).ChangeCanExecute();
+            }
+        }
+    }
+
+    public DateTime EndTime
+    {
+        get => _appointment?.EndTime ?? DateTime.Now.AddHours(1);
+        set
+        {
+            if (_appointment != null && _appointment.EndTime != value)
+            {
+                _appointment.EndTime = value;
+                OnPropertyChanged();
+                ((Command)SaveCommand).ChangeCanExecute();
+            }
+        }
+    }
+
+    public int PatientId
+    {
+        get => _appointment?.PatientId ?? 0;
+        set
+        {
+            if (_appointment != null && _appointment.PatientId != value)
+            {
+                _appointment.PatientId = value;
+                OnPropertyChanged();
+                ((Command)SaveCommand).ChangeCanExecute();
+            }
+        }
+    }
+
+    public string? PatientName
+    {
+        get => _appointment?.PatientName;
+        set
+        {
+            if (_appointment != null && _appointment.PatientName != value)
+            {
+                _appointment.PatientName = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public int PhysicianId
+    {
+        get => _appointment?.PhysicianId ?? 0;
+        set
+        {
+            if (_appointment != null && _appointment.PhysicianId != value)
+            {
+                _appointment.PhysicianId = value;
+                OnPropertyChanged();
+                ((Command)SaveCommand).ChangeCanExecute();
+            }
+        }
+    }
+
+    public string? PhysicianName
+    {
+        get => _appointment?.PhysicianName;
+        set
+        {
+            if (_appointment != null && _appointment.PhysicianName != value)
+            {
+                _appointment.PhysicianName = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public string? Reason
+    {
+        get => _appointment?.Reason ?? string.Empty;
+        set
+        {
+            if (_appointment != null && _appointment.Reason != value)
+            {
+                _appointment.Reason = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public string? Notes
+    {
+        get => _appointment?.Notes ?? string.Empty;
+        set
+        {
+            if (_appointment != null && _appointment.Notes != value)
+            {
+                _appointment.Notes = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public List<PatientDTO> Patients => PatientServiceProxy.Current.Patients;
+
+    public List<PhysicianDTO> Physicians => PhysicianServiceProxy.Current.Physicians;
+
+    private PatientDTO? _selectedPatient;
+    public PatientDTO? SelectedPatient
+    {
+        get => _selectedPatient;
+        set
+        {
+            if (_selectedPatient != value)
+            {
+                _selectedPatient = value;
+                if (_appointment != null && value != null)
+                {
+                    _appointment.PatientId = value.Id;
+                    _appointment.PatientName = value.Name;
+                    OnPropertyChanged(nameof(PatientId));
+                    OnPropertyChanged(nameof(PatientName));
+                    ((Command)SaveCommand).ChangeCanExecute();
+                }
+            }
+        }
+    }
+
+    private PhysicianDTO? _selectedPhysician;
+    public PhysicianDTO? SelectedPhysician
+    {
+        get => _selectedPhysician;
+        set
+        {
+            if (_selectedPhysician != value)
+            {
+                _selectedPhysician = value;
+                if (_appointment != null && value != null)
+                {
+                    _appointment.PhysicianId = value.Id;
+                    _appointment.PhysicianName = value.Name;
+                    OnPropertyChanged(nameof(PhysicianId));
+                    OnPropertyChanged(nameof(PhysicianName));
+                    ((Command)SaveCommand).ChangeCanExecute();
+                }
+            }
+        }
+    }
+
+    public ICommand SaveCommand { get; private set; }
+    public ICommand CancelCommand { get; private set; }
+
+    private async Task LoadAppointment(int appointmentId)
+    {
+        if (appointmentId > 0)
+        {
+            _appointment = AppointmentServiceProxy.Current.Appointments
+                            .FirstOrDefault(a => a.Id == appointmentId);
+            _isNewAppointment = false;
+        }
+        else
+        {
+            _appointment = new AppointmentDTO
+            {
+                Date = DateTime.Today,
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.AddHours(1)
+            };
+            _isNewAppointment = true;
+        }
+
+        // Notify all properties changed
+        OnPropertyChanged(nameof(Id));
+        OnPropertyChanged(nameof(Date));
+        OnPropertyChanged(nameof(StartTime));
+        OnPropertyChanged(nameof(EndTime));
+        OnPropertyChanged(nameof(PatientId));
+        OnPropertyChanged(nameof(PatientName));
+        OnPropertyChanged(nameof(PhysicianId));
+        OnPropertyChanged(nameof(PhysicianName));
+        OnPropertyChanged(nameof(Reason));
+        OnPropertyChanged(nameof(Notes));
+        OnPropertyChanged(nameof(Patients));
+        OnPropertyChanged(nameof(Physicians));
+
+        // 🔥 This is the required fix:
+        ((Command)SaveCommand).ChangeCanExecute();
+    }
+
+    // Used by Shell navigation + QueryProperty
+    public async Task Load()
+    {
+        await LoadAppointment(AppointmentId);
+    }
+
+    private async Task SaveAppointment()
+    {
+        try
+        {
+            if (_appointment != null && CanSave())
+            {
+                // Update patient and physician names based on selected IDs
+                var selectedPatient = PatientServiceProxy.Current.Patients.FirstOrDefault(p => p.Id == _appointment.PatientId);
+                var selectedPhysician = PhysicianServiceProxy.Current.Physicians.FirstOrDefault(p => p.Id == _appointment.PhysicianId);
+                
+                if (selectedPatient != null)
+                {
+                    _appointment.PatientName = selectedPatient.Name;
+                }
+                
+                if (selectedPhysician != null)
+                {
+                    _appointment.PhysicianName = selectedPhysician.Name;
+                }
+
+                var result = await AppointmentServiceProxy.Current.AddOrUpdateAppointment(_appointment);
+                if (result != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Navigating to AppointmentManagement...");
+                    await Shell.Current.GoToAsync("///AppointmentPage");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error", "Failed to save appointment. Please try again.", "OK");
+                }
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Validation Error", "Please fill in all required fields (Patient, Physician, Date, Start Time, and End Time).", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+        }
+    }
+
+    private async Task Cancel()
+    {
+        System.Diagnostics.Debug.WriteLine("Navigating to AppointmentManagement...");
+        await Shell.Current.GoToAsync("///AppointmentPage");
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:App.Clinic.ViewModels"
+    x:Class="App.Clinic.Views.AppointmentDetailsPage"
+    x:DataType="viewmodels:AppointmentDetailsViewModel"
+    Title="Appointment Details">
+    
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+            
+            <!-- Header -->
+            <Label Text="Appointment Information"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20" />
+            
+            <!-- Patient Picker -->
+            <Label Text="Patient" FontAttributes="Bold" />
+            <Picker ItemsSource="{Binding Patients}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedPatient}"
+                    Title="Select a patient" />
+            
+            <!-- Physician Picker -->
+            <Label Text="Physician" FontAttributes="Bold" />
+            <Picker ItemsSource="{Binding Physicians}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedPhysician}"
+                    Title="Select a physician" />
+            
+            <!-- Date Picker -->
+            <Label Text="Date" FontAttributes="Bold" />
+            <DatePicker Date="{Binding Date}"
+                        MinimumDate="{Binding MinDate}" />
+            
+            <!-- Start Time -->
+            <Label Text="Start Time" FontAttributes="Bold" />
+            <TimePicker Time="{Binding StartTime}" />
+            
+            <!-- End Time -->
+            <Label Text="End Time" FontAttributes="Bold" />
+            <TimePicker Time="{Binding EndTime}" />
+            
+            <!-- Reason Entry -->
+            <Label Text="Reason for Visit" FontAttributes="Bold" />
+            <Entry Text="{Binding Reason}"
+                   Placeholder="Enter reason for appointment"
+                   MaxLength="200" />
+            
+            <!-- Notes Editor -->
+            <Label Text="Notes" FontAttributes="Bold" />
+            <Editor Text="{Binding Notes}"
+                    Placeholder="Enter any additional notes"
+                    HeightRequest="100"
+                    MaxLength="500"
+                    AutoSize="TextChanges" />
+            
+            <!-- Buttons -->
+            <StackLayout Orientation="Horizontal" 
+                         HorizontalOptions="Center" 
+                         Spacing="20"
+                         Margin="0,20,0,0">
+                <Button Text="Save"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="#007AFF"
+                        TextColor="White"
+                        WidthRequest="120" />
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="#FF3B30"
+                        TextColor="White"
+                        WidthRequest="120" />
+            </StackLayout>
+            
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
