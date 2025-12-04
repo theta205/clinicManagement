@@ -75,6 +75,56 @@
                 </StackLayout>
             </Frame>
             
+            <!-- Race Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Race" FontAttributes="Bold" TextColor="Black" />
+                    <Entry Text="{Binding Race}"
+                           Placeholder="Enter race"
+                           TextColor="Black"
+                           PlaceholderColor="Gray"
+                           MaxLength="50" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Gender Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Gender" FontAttributes="Bold" TextColor="Black" />
+                    <Entry Text="{Binding Gender}"
+                           Placeholder="Enter gender"
+                           TextColor="Black"
+                           PlaceholderColor="Gray"
+                           MaxLength="20" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Diagnoses Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Diagnoses" FontAttributes="Bold" TextColor="Black" />
+                    <Editor Text="{Binding DiagnosesText}"
+                            Placeholder="Enter diagnoses (comma-separated)"
+                            TextColor="Black"
+                            PlaceholderColor="Gray"
+                            HeightRequest="80"
+                            MaxLength="500" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Prescriptions Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Prescriptions" FontAttributes="Bold" TextColor="Black" />
+                    <Editor Text="{Binding PrescriptionsText}"
+                            Placeholder="Enter prescriptions (comma-separated)"
+                            TextColor="Black"
+                            PlaceholderColor="Gray"
+                            HeightRequest="80"
+                            MaxLength="500" />
+                </StackLayout>
+            </Frame>
+            
             <!-- Action Buttons -->
             <StackLayout Orientation="Horizontal" 
                          HorizontalOptions="Center"

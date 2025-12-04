@@ -1,6 +1,7 @@
 using Library.Clinic.DTO;
 using Library.Clinic.Services;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace App.Clinic.ViewModels
@@ -95,6 +96,74 @@ namespace App.Clinic.ViewModels
             }
         }
 
+        public string Race
+        {
+            get => _patient?.Race ?? string.Empty;
+            set
+            {
+                if (_patient != null && _patient.Race != value)
+                {
+                    _patient.Race = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Gender
+        {
+            get => _patient?.Gender ?? string.Empty;
+            set
+            {
+                if (_patient != null && _patient.Gender != value)
+                {
+                    _patient.Gender = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string DiagnosesText
+        {
+            get => _patient != null ? string.Join(", ", _patient.Diagnoses) : string.Empty;
+            set
+            {
+                if (_patient != null)
+                {
+                    var newDiagnoses = value.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                           .Select(s => s.Trim())
+                                           .Where(s => !string.IsNullOrEmpty(s))
+                                           .ToList();
+                    
+                    if (!_patient.Diagnoses.SequenceEqual(newDiagnoses))
+                    {
+                        _patient.Diagnoses = newDiagnoses;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+        }
+
+        public string PrescriptionsText
+        {
+            get => _patient != null ? string.Join(", ", _patient.Prescriptions) : string.Empty;
+            set
+            {
+                if (_patient != null)
+                {
+                    var newPrescriptions = value.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                                .Select(s => s.Trim())
+                                                .Where(s => !string.IsNullOrEmpty(s))
+                                                .ToList();
+                    
+                    if (!_patient.Prescriptions.SequenceEqual(newPrescriptions))
+                    {
+                        _patient.Prescriptions = newPrescriptions;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+        }
+
         public Command SaveCommand { get; }
         public Command CancelCommand { get; }
 
@@ -116,6 +185,10 @@ namespace App.Clinic.ViewModels
             OnPropertyChanged(nameof(SSN));
             OnPropertyChanged(nameof(BirthDate));
             OnPropertyChanged(nameof(Address));
+            OnPropertyChanged(nameof(Race));
+            OnPropertyChanged(nameof(Gender));
+            OnPropertyChanged(nameof(DiagnosesText));
+            OnPropertyChanged(nameof(PrescriptionsText));
         }
 
         private async Task SavePatient()

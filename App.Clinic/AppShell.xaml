@@ -13,6 +13,11 @@
         Route="PatientManagement" />
         
     <ShellContent
+        Title="Physicians"
+        ContentTemplate="{DataTemplate local:PhysicianManagementPage}"
+        Route="PhysicianManagement" />
+        
+    <ShellContent
         Title="Appointments"
         ContentTemplate="{DataTemplate local:AppointmentPage}"
         Route="AppointmentPage" />
