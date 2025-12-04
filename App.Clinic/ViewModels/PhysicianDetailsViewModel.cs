@@ -6,10 +6,13 @@ using System.Windows.Input;
 
 namespace App.Clinic.ViewModels;
 
+[QueryProperty(nameof(PhysicianId), "physicianId")]
 public class PhysicianDetailsViewModel : INotifyPropertyChanged
 {
     private PhysicianDTO? _physician;
     private bool _isNewPhysician;
+
+    public int PhysicianId { get; set; }
 
     public PhysicianDetailsViewModel()
     {
@@ -125,6 +128,12 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(LicenseNumber));
         OnPropertyChanged(nameof(GraduationDate));
         OnPropertyChanged(nameof(SpecializationsText));
+    }
+
+    // Convenience entry point used by Shell navigation + QueryProperty
+    public async Task Load()
+    {
+        await LoadPhysician(PhysicianId);
     }
 
     private async Task SavePhysician()

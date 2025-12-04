@@ -119,8 +119,9 @@ public class PhysicianViewModel
         {
             return;
         }
+
         var selectedPhysicianId = pvm?.Id ?? 0;
-        Shell.Current.GoToAsync($"/PhysicianDetails?physicianId={selectedPhysicianId}");
+        Shell.Current.GoToAsync($"PhysicianDetails?physicianId={selectedPhysicianId}");
     }
 
     public async void ExecuteAdd()

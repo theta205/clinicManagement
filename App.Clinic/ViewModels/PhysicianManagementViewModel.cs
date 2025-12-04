@@ -136,7 +136,7 @@ public class PhysicianManagementViewModel: INotifyPropertyChanged
     {
         try
         {
-            await Shell.Current.GoToAsync("/PhysicianDetails");
+            await Shell.Current.GoToAsync("PhysicianDetails");
         }
         catch (Exception ex)
         {
@@ -148,11 +148,7 @@ public class PhysicianManagementViewModel: INotifyPropertyChanged
     {
         if (SelectedPhysician != null)
         {
-            var parameters = new Dictionary<string, object>
-            {
-                { "physicianId", SelectedPhysician.Id }
-            };
-            await Shell.Current.GoToAsync("/PhysicianDetails", parameters);
+            await Shell.Current.GoToAsync($"PhysicianDetails?physicianId={SelectedPhysician.Id}");
         }
     }
 

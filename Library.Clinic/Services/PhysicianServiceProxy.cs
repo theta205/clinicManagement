@@ -87,11 +87,14 @@ public class PhysicianServiceProxy
             var payload = await new WebRequestHandler().Post("/physician", physician);
             var newPhysician = JsonConvert.DeserializeObject<PhysicianDTO>(payload);
             
-            if(newPhysician != null && newPhysician.Id > 0 && physician.Id == 0)
+            if (newPhysician != null && newPhysician.Id > 0 && physician.Id == 0)
             {
+                // New physician returned with a real ID from server
                 physicians.Add(newPhysician);
-            } else if(newPhysician != null && physician != null && physician.Id > 0 && physician.Id == newPhysician.Id)
+            }
+            else if (newPhysician != null && physician != null && physician.Id > 0 && physician.Id == newPhysician.Id)
             {
+                // Edit: replace existing physician in list
                 var currentPhysician = physicians.FirstOrDefault(p => p.Id == newPhysician.Id);
                 var index = physicians.Count;
                 if (currentPhysician != null)
@@ -100,6 +103,11 @@ public class PhysicianServiceProxy
                     physicians.RemoveAt(index);
                 }
                 physicians.Insert(index, newPhysician);
+            }
+            else
+            {
+                // Server returned Id = 0 or invalid response, use local fallback
+                return AddOrUpdatePhysicianLocal(physician);
             }
             
             return newPhysician;
