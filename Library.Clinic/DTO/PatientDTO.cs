@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Library.Clinic.DTO
 {
@@ -9,6 +10,10 @@ namespace Library.Clinic.DTO
         public string SSN { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }  // Note: This is the correct property name
         public string? Address { get; set; }
+        public string Race { get; set; } = string.Empty;
+        public string Gender { get; set; } = string.Empty;
+        public List<string> Diagnoses { get; set; } = new List<string>();
+        public List<string> Prescriptions { get; set; } = new List<string>();
 
         public static implicit operator Models.Patient(PatientDTO dto)
         {
@@ -20,7 +25,11 @@ namespace Library.Clinic.DTO
                 Name = dto.Name,
                 SSN = dto.SSN,
                 BirthDate = dto.BirthDate,  // Map to the correct property name
-                Address = dto.Address
+                Address = dto.Address,
+                Race = dto.Race,
+                Gender = dto.Gender,
+                Diagnoses = dto.Diagnoses,
+                Prescriptions = dto.Prescriptions
             };
         }
     }

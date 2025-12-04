@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:App.Clinic.ViewModels"
+    x:Class="App.Clinic.Views.PhysicianDetailsPage"
+    x:DataType="viewmodels:PhysicianDetailsViewModel"
+    Title="Physician Details">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:PhysicianDetailsViewModel />
+    </ContentPage.BindingContext>
+    
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+            
+            <!-- Header -->
+            <Label Text="Physician Information"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20" />
+            
+            <!-- Physician ID (Read-only for existing physicians) -->
+            <Frame BackgroundColor="LightGray" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Physician ID" FontAttributes="Bold" TextColor="Black" />
+                    <Label Text="{Binding Id}" TextColor="Black" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Name Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Name *" FontAttributes="Bold" TextColor="Black" />
+                    <Entry Text="{Binding Name}"
+                           Placeholder="Enter physician name"
+                           TextColor="Black"
+                           PlaceholderColor="Gray"
+                           MaxLength="100" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- License Number Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="License Number *" FontAttributes="Bold" TextColor="Black" />
+                    <Entry Text="{Binding LicenseNumber}"
+                           Placeholder="Enter license number"
+                           TextColor="Black"
+                           PlaceholderColor="Gray"
+                           MaxLength="20" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Graduation Date Picker -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Graduation Date *" FontAttributes="Bold" TextColor="Black" />
+                    <DatePicker Date="{Binding GraduationDate}" TextColor="Black" BackgroundColor="LightGray" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Specializations Entry -->
+            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+                <StackLayout>
+                    <Label Text="Specializations" FontAttributes="Bold" TextColor="Black" />
+                    <Editor Text="{Binding SpecializationsText}"
+                            Placeholder="Enter specializations (comma-separated)"
+                            TextColor="Black"
+                            PlaceholderColor="Gray"
+                            HeightRequest="80"
+                            MaxLength="500" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <StackLayout Orientation="Horizontal" 
+                         HorizontalOptions="Center"
+                         Spacing="20"
+                         Margin="0,20,0,0">
+                
+                <Button Text="Save"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="LightGreen"
+                        TextColor="Black"
+                        WidthRequest="100"
+                        HeightRequest="50" />
+                
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="LightCoral"
+                        TextColor="Black"
+                        WidthRequest="100"
+                        HeightRequest="50" />
+            </StackLayout>
+            
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

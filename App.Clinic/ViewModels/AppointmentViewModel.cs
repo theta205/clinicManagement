@@ -69,11 +69,8 @@ namespace App.Clinic.ViewModels
         {
             if (Model != null)
             {
-                if (Model.StartTime != null)
-                {
-                    Model.StartTime = StartDate;
-                    Model.StartTime = Model.StartTime.Value.AddHours(StartTime.Hours);
-                }
+                Model.StartTime = StartDate;
+                Model.StartTime = Model.StartTime.AddHours(StartTime.Hours);
             }
         }
         
@@ -81,7 +78,7 @@ namespace App.Clinic.ViewModels
             
             get
             {
-                return Model?.StartTime?.Date ?? DateTime.Today;
+                return Model?.StartTime.Date ?? DateTime.Today;
             }
 
             set

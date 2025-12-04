@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:App.Clinic.ViewModels"
+    x:Class="App.Clinic.Views.PhysicianManagementPage"
+    x:DataType="viewmodels:PhysicianManagementViewModel"
+    Title="Physician Management">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:PhysicianManagementViewModel />
+    </ContentPage.BindingContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Header and Controls -->
+        <StackLayout Grid.Row="0" Padding="20" Spacing="10">
+            <Label Text="Physician Management"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            
+            <!-- Search and Sort Controls -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                <Entry Grid.Column="0"
+                       Text="{Binding Query}"
+                       Placeholder="Search physicians..."
+                       Margin="0,0,5,0" />
+                
+                <Button Grid.Column="1"
+                        Text="Search"
+                        Command="{Binding SearchCommand}"
+                        Margin="0,0,5,0" />
+                
+                <Button Grid.Column="2"
+                        Text="Add Physician"
+                        Command="{Binding AddCommand}"
+                        BackgroundColor="LightGreen" />
+            </Grid>
+            
+            <!-- Sort Options -->
+            <Picker Title="Sort by"
+                    ItemsSource="{Binding SortChoices}"
+                    SelectedItem="{Binding SortChoice}" />
+        </StackLayout>
+        
+        <!-- Physician List -->
+        <CollectionView Grid.Row="1"
+                         ItemsSource="{Binding Physicians}"
+                         SelectedItem="{Binding SelectedPhysician}"
+                         Margin="10">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:PhysicianViewModel">
+                    <Grid Padding="15" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="{Binding Name}"
+                                   FontAttributes="Bold"
+                                   TextColor="Black" />
+                            <Label Text="{Binding LicenseNumber}"
+                                   TextColor="Gray" />
+                            <Label Text="{Binding SpecializationsText}"
+                                   TextColor="DarkGray"
+                                   FontSize="Small" />
+                        </StackLayout>
+                        
+                        <Button Grid.Column="1"
+                                Text="Edit"
+                                Clicked="OnEditClicked"
+                                Margin="0,0,5,0"
+                                BackgroundColor="LightBlue" />
+                        
+                        <Button Grid.Column="2"
+                                Text="Delete"
+                                Clicked="OnDeleteClicked"
+                                BackgroundColor="LightCoral" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
