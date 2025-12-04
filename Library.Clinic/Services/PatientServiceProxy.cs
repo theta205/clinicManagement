@@ -32,13 +32,11 @@ namespace Library.Clinic.Services
         private static PatientServiceProxy? instance;
         private PatientServiceProxy()
         {
-            instance = null;
-            
             // Initialize with sample data to avoid blocking
             Patients = new List<PatientDTO> {
-                new PatientDTO { Id = 1, Name = "John Doe", SSN = "123-45-6789", BirthDate = new DateTime(1980, 1, 15), Address = "123 Main St, Anytown, USA" },
-                new PatientDTO { Id = 2, Name = "Jane Smith", SSN = "987-65-4321", BirthDate = new DateTime(1990, 5, 22), Address = "456 Oak Ave, Somewhere, USA" },
-                new PatientDTO { Id = 3, Name = "Bob Johnson", SSN = "456-78-9012", BirthDate = new DateTime(1975, 8, 10), Address = "789 Pine Rd, Nowhere, USA" }
+                new PatientDTO { Id = 1, Name = "John Doe", SSN = "123-45-6789", BirthDate = new DateTime(1980, 1, 15), Address = "123 Main St, Anytown, USA", Race = "Caucasian", Gender = "Male", Diagnoses = new List<string> { "Hypertension" }, Prescriptions = new List<string> { "Lisinopril" } },
+                new PatientDTO { Id = 2, Name = "Jane Smith", SSN = "987-65-4321", BirthDate = new DateTime(1990, 5, 22), Address = "456 Oak Ave, Somewhere, USA", Race = "Asian", Gender = "Female", Diagnoses = new List<string> { "Asthma" }, Prescriptions = new List<string> { "Albuterol" } },
+                new PatientDTO { Id = 3, Name = "Bob Johnson", SSN = "456-78-9012", BirthDate = new DateTime(1975, 8, 10), Address = "789 Pine Rd, Nowhere, USA", Race = "African American", Gender = "Male", Diagnoses = new List<string> { "Diabetes Type 2" }, Prescriptions = new List<string> { "Metformin" } }
             };
             
             // Try to load data asynchronously without blocking

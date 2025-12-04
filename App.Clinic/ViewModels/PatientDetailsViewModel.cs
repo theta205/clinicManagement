@@ -195,8 +195,13 @@ namespace App.Clinic.ViewModels
         {
             try
             {
+                // Debug alert to see if Save is being called
+                await Shell.Current.DisplayAlert("Debug", "SavePatient method called", "OK");
+                
                 if (_patient != null && CanSave())
                 {
+                    await Shell.Current.DisplayAlert("Debug", "Validation passed, saving patient...", "OK");
+                    
                     var result = await PatientServiceProxy.Current.AddOrUpdatePatient(_patient);
                     if (result != null)
                     {
