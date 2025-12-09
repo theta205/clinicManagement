@@ -36,12 +36,30 @@ namespace Library.Clinic.Services
 
         private PatientServiceProxy()
         {
-            // Initialize with sample demo data
-            allPatients = new List<PatientDTO> {
-                new PatientDTO { Id = 1, Name = "John Doe", SSN = "123-45-6789", BirthDate = new DateTime(1980, 1, 15), Address = "123 Main St", Race = "Caucasian", Gender = "Male", Diagnoses = new List<string>{ "Hypertension" }, Prescriptions = new List<string>{ "Lisinopril" } },
-                new PatientDTO { Id = 2, Name = "Jane Smith", SSN = "987-65-4321", BirthDate = new DateTime(1990, 5, 22), Address = "456 Oak Ave", Race = "Asian", Gender = "Female", Diagnoses = new List<string>{ "Asthma" }, Prescriptions = new List<string>{ "Albuterol" } },
-                new PatientDTO { Id = 3, Name = "Bob Johnson", SSN = "456-78-9012", BirthDate = new DateTime(1975, 8, 10), Address = "789 Pine Rd", Race = "African American", Gender = "Male", Diagnoses = new List<string>{ "Diabetes Type 2" }, Prescriptions = new List<string>{ "Metformin" } }
-            };
+            // Try to load patients from file-based storage first
+            var filePatients = Filebase.Current.Patients;
+
+            if (filePatients.Any())
+            {
+                allPatients = filePatients
+                    .Select(p => (PatientDTO)p)
+                    .ToList();
+            }
+            else
+            {
+                // Initialize with sample demo data on first run
+                allPatients = new List<PatientDTO> {
+                    new PatientDTO { Id = 1, Name = "John Doe", SSN = "123-45-6789", BirthDate = new DateTime(1980, 1, 15), Address = "123 Main St", Race = "Caucasian", Gender = "Male", Diagnoses = new List<string>{ "Hypertension" }, Prescriptions = new List<string>{ "Lisinopril" } },
+                    new PatientDTO { Id = 2, Name = "Jane Smith", SSN = "987-65-4321", BirthDate = new DateTime(1990, 5, 22), Address = "456 Oak Ave", Race = "Asian", Gender = "Female", Diagnoses = new List<string>{ "Asthma" }, Prescriptions = new List<string>{ "Albuterol" } },
+                    new PatientDTO { Id = 3, Name = "Bob Johnson", SSN = "456-78-9012", BirthDate = new DateTime(1975, 8, 10), Address = "789 Pine Rd", Race = "African American", Gender = "Male", Diagnoses = new List<string>{ "Diabetes Type 2" }, Prescriptions = new List<string>{ "Metformin" } }
+                };
+
+                // Persist the seed data so it survives app restarts
+                foreach (var dto in allPatients)
+                {
+                    Filebase.Current.AddOrUpdate((Patient)dto);
+                }
+            }
         }
 
         // Public-facing list (filtered or sorted)
@@ -145,6 +163,9 @@ namespace Library.Clinic.Services
 
             // Refresh visible list
             Patients = allPatients.ToList();
+
+            // Persist to file-based storage as well
+            Filebase.Current.AddOrUpdate((Patient)dto);
         }
 
         // -----------------------------
@@ -158,6 +179,9 @@ namespace Library.Clinic.Services
             {
                 allPatients.Remove(p);
                 Patients = allPatients.ToList();
+
+                // Delete from file-based storage
+                Filebase.Current.Delete(id);
             }
 
             try
