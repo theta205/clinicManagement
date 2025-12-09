@@ -24,7 +24,7 @@
                             <DataTrigger TargetType="Frame"
                                          Binding="{Binding IsToday}"
                                          Value="True">
-                                <Setter Property="BackgroundColor" Value="#FFFDE7" />
+                                <Setter Property="BackgroundColor" Value="#FFCDD2" />
                             </DataTrigger>
                         </Frame.Triggers>
 
