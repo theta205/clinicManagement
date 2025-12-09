@@ -30,6 +30,11 @@
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedPhysician}"
                     Title="Select a physician" />
+
+            <!-- Room Entry -->
+            <Label Text="Room" FontAttributes="Bold" />
+            <Entry Text="{Binding Room}"
+                   Placeholder="Enter room (e.g., 101)" />
             
             <!-- Date Picker -->
             <Label Text="Date" FontAttributes="Bold" />

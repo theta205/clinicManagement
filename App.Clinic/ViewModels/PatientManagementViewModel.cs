@@ -27,6 +27,8 @@ namespace App.Clinic.ViewModels
             };
 
             SortChoice = SortChoiceEnum.NameAscending;
+            Query = string.Empty;
+            Task.Run(async () => await PatientServiceProxy.Current.Search(Query));
             
             AddCommand = new Command(DoAdd);
             EditCommand = new Command(DoEdit);
@@ -113,10 +115,8 @@ namespace App.Clinic.ViewModels
 
         private void DoSearch()
         {
-            if (Query != null)
-            {
-                Task.Run(async () => await PatientServiceProxy.Current.Search(Query));
-            }
+            var q = Query ?? string.Empty;
+            Task.Run(async () => await PatientServiceProxy.Current.Search(q));
             Refresh();
         }
 

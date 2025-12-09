@@ -43,10 +43,10 @@
             </Frame>
             
             <!-- Birth Date Picker -->
-            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+            <Frame BackgroundColor="#D0D0D0" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Birth Date *" FontAttributes="Bold" TextColor="Black" />
-                    <DatePicker Date="{Binding Patient.BirthDate}" TextColor="Black" BackgroundColor="White" FontFamily="Arial" />
+                    <DatePicker Date="{Binding Patient.BirthDate}" TextColor="Black" FontFamily="Arial" />
                 </StackLayout>
             </Frame>
             

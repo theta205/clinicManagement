@@ -14,6 +14,7 @@ namespace Library.Clinic.Models
         public string? PhysicianName { get; set; }
         public string? Reason { get; set; }
         public string? Notes { get; set; }
+        public string? Room { get; set; }
 
         // Navigation property
         public virtual Patient? Patient { get; set; }

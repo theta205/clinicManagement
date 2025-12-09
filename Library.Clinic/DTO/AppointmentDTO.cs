@@ -14,6 +14,7 @@ namespace Library.Clinic.DTO
         public string? PhysicianName { get; set; }
         public string? Reason { get; set; }
         public string? Notes { get; set; }
+        public string? Room { get; set; }
 
         public static implicit operator Models.Appointment(AppointmentDTO dto)
         {
@@ -30,7 +31,8 @@ namespace Library.Clinic.DTO
                 PhysicianId = dto.PhysicianId,
                 PhysicianName = dto.PhysicianName,
                 Reason = dto.Reason,
-                Notes = dto.Notes
+                Notes = dto.Notes,
+                Room = dto.Room
             };
         }
     }

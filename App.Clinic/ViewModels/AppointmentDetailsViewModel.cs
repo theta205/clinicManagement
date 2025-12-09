@@ -177,6 +177,20 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
         }
     }
 
+    public string? Room
+    {
+        get => _appointment?.Room ?? string.Empty;
+        set
+        {
+            if (_appointment != null && _appointment.Room != value)
+            {
+                _appointment.Room = value;
+                OnPropertyChanged();
+                ((Command)SaveCommand).ChangeCanExecute();
+            }
+        }
+    }
+
     public List<PatientDTO> Patients => PatientServiceProxy.Current.Patients;
 
     public List<PhysicianDTO> Physicians => PhysicianServiceProxy.Current.Physicians;
@@ -256,8 +270,7 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(PhysicianName));
         OnPropertyChanged(nameof(Reason));
         OnPropertyChanged(nameof(Notes));
-        OnPropertyChanged(nameof(Patients));
-        OnPropertyChanged(nameof(Physicians));
+        OnPropertyChanged(nameof(Room));
 
         // 🔥 This is the required fix:
         ((Command)SaveCommand).ChangeCanExecute();
@@ -287,6 +300,30 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
                 if (selectedPhysician != null)
                 {
                     _appointment.PhysicianName = selectedPhysician.Name;
+                }
+
+                // Client-side room conflict validation: no overlapping
+                // appointments in the same room at the same time.
+                if (!string.IsNullOrWhiteSpace(_appointment.Room))
+                {
+                    var sameRoomAppointments = AppointmentServiceProxy.Current.Appointments
+                        .Where(a => a.Room != null &&
+                                    a.Room.Equals(_appointment.Room, StringComparison.OrdinalIgnoreCase) &&
+                                    a.Id != _appointment.Id &&
+                                    a.Date.Date == _appointment.Date.Date);
+
+                    bool hasOverlap = sameRoomAppointments.Any(a =>
+                        _appointment.StartTime < a.EndTime &&
+                        _appointment.EndTime > a.StartTime);
+
+                    if (hasOverlap)
+                    {
+                        await Shell.Current.DisplayAlert(
+                            "Scheduling Conflict",
+                            $"Another appointment is already scheduled in room '{_appointment.Room}' during this time.",
+                            "OK");
+                        return;
+                    }
                 }
 
                 var result = await AppointmentServiceProxy.Current.AddOrUpdateAppointment(_appointment);

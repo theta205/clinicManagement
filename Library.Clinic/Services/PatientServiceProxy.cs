@@ -61,6 +61,12 @@ namespace Library.Clinic.Services
         // -----------------------------
         public async Task<List<PatientDTO>> Search(string query)
         {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                Patients = allPatients.ToList();
+                return Patients;
+            }
+
             try
             {
                 var resultJson = await new WebRequestHandler()
@@ -75,17 +81,10 @@ namespace Library.Clinic.Services
             catch
             {
                 // Local fallback search - but do NOT destroy allPatients
-                if (string.IsNullOrWhiteSpace(query))
-                {
-                    Patients = allPatients.ToList(); // full list
-                }
-                else
-                {
-                    Patients = allPatients
-                        .Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                                    p.SSN.Contains(query, StringComparison.OrdinalIgnoreCase))
-                        .ToList();
-                }
+                Patients = allPatients
+                    .Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                                p.SSN.Contains(query, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
             }
 
             return Patients;

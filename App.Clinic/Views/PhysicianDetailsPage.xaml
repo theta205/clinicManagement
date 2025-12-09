@@ -42,10 +42,10 @@
             </Frame>
             
             <!-- Graduation Date Picker -->
-            <Frame BackgroundColor="White" Padding="15" CornerRadius="10">
+            <Frame BackgroundColor="#D0D0D0" Padding="15" CornerRadius="10">
                 <StackLayout>
                     <Label Text="Graduation Date *" FontAttributes="Bold" TextColor="Black" />
-                    <DatePicker Date="{Binding GraduationDate}" TextColor="Black" BackgroundColor="White" FontFamily="Arial" />
+                    <DatePicker Date="{Binding GraduationDate}" TextColor="Black" FontFamily="Arial" />
                 </StackLayout>
             </Frame>
             

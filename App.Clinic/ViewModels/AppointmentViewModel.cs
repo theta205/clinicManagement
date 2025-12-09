@@ -156,6 +156,24 @@ namespace App.Clinic.ViewModels
             }
         }
 
+        public string? Room
+        {
+            get => Model?.Room ?? string.Empty;
+            set
+            {
+                if (Model != null && Model.Room != value)
+                {
+                    Model.Room = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsToday
+        {
+            get => (Model?.Date.Date ?? DateTime.MinValue.Date) == DateTime.Today;
+        }
+
         public ICommand DeleteCommand { get; private set; }
         public ICommand EditCommand { get; private set; }
 
