@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Library.Clinic.Models
 {
@@ -15,6 +16,7 @@ namespace Library.Clinic.Models
         public string? Reason { get; set; }
         public string? Notes { get; set; }
         public string? Room { get; set; }
+        public List<Treatment> Treatments { get; set; } = new List<Treatment>();
 
         // Navigation property
         public virtual Patient? Patient { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Library.Clinic.DTO
 {
@@ -15,6 +16,7 @@ namespace Library.Clinic.DTO
         public string? Reason { get; set; }
         public string? Notes { get; set; }
         public string? Room { get; set; }
+        public List<TreatmentDTO> Treatments { get; set; } = new List<TreatmentDTO>();
 
         public static implicit operator Models.Appointment(AppointmentDTO dto)
         {
@@ -32,7 +34,12 @@ namespace Library.Clinic.DTO
                 PhysicianName = dto.PhysicianName,
                 Reason = dto.Reason,
                 Notes = dto.Notes,
-                Room = dto.Room
+                Room = dto.Room,
+                Treatments = dto.Treatments?.ConvertAll(t => new Models.Treatment
+                {
+                    Name = t.Name,
+                    Cost = t.Cost
+                }) ?? new List<Models.Treatment>()
             };
         }
     }

@@ -75,19 +75,12 @@ COURSE TODO – CLINIC APP
 
 
 === INTEGRATION & POLISH ===
-
-11. WEBAPI INTEGRATION CHECK
-    - [ ] Ensure BaseUrl in WebRequestHandler points to running WebAPI
-    - [ ] Verify patient CRUD works end-to-end
-    - [ ] Verify physician CRUD works end-to-end
-    - [ ] Verify appointment CRUD works end-to-end
-
-12. VALIDATION & UX
+11. VALIDATION & UX
     - [ ] Add required-field validation messages on CRUD dialogs
     - [ ] Add basic error handling for failed HTTP calls
     - [ ] Ensure navigation flow is smooth after save/delete
 
-13. TESTING / DEMO PASS
+12. TESTING / DEMO PASS
     - [ ] Run through B-grade rubric line by line and confirm behavior
     - [ ] Run through A-grade rubric line by line and confirm behavior
     - [ ] Fix any remaining visual or functional issues

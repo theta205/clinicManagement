@@ -1,6 +1,8 @@
 using Library.Clinic.DTO;
 using Library.Clinic.Services;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -22,6 +24,8 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
         System.Diagnostics.Debug.WriteLine("[AppointmentDetails] ViewModel created, setting up commands");
         SaveCommand = new Command(async () => await SaveAppointment(), CanSave);
         CancelCommand = new Command(async () => await Cancel());
+        AddTreatmentCommand = new Command(AddTreatment);
+        RemoveTreatmentCommand = new Command<TreatmentDTO>(RemoveTreatment);
     }
 
     private bool CanSave()
@@ -191,6 +195,47 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
         }
     }
 
+    public ObservableCollection<TreatmentDTO> Treatments
+    {
+        get => new ObservableCollection<TreatmentDTO>(_appointment?.Treatments ?? new List<TreatmentDTO>());
+    }
+
+    private string _newTreatmentName = string.Empty;
+    public string NewTreatmentName
+    {
+        get => _newTreatmentName;
+        set
+        {
+            if (_newTreatmentName != value)
+            {
+                _newTreatmentName = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    private string _newTreatmentCostText = string.Empty;
+    public string NewTreatmentCostText
+    {
+        get => _newTreatmentCostText;
+        set
+        {
+            if (_newTreatmentCostText != value)
+            {
+                _newTreatmentCostText = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public decimal TotalCost
+    {
+        get => (decimal)(_appointment?.Treatments?.Sum(t => t.Cost) ?? 0m);
+    }
+
+    public ICommand AddTreatmentCommand { get; private set; }
+    public ICommand RemoveTreatmentCommand { get; private set; }
+
     public List<PatientDTO> Patients => PatientServiceProxy.Current.Patients;
 
     public List<PhysicianDTO> Physicians => PhysicianServiceProxy.Current.Physicians;
@@ -271,6 +316,8 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Reason));
         OnPropertyChanged(nameof(Notes));
         OnPropertyChanged(nameof(Room));
+        OnPropertyChanged(nameof(Treatments));
+        OnPropertyChanged(nameof(TotalCost));
 
         // 🔥 This is the required fix:
         ((Command)SaveCommand).ChangeCanExecute();
@@ -359,5 +406,50 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void AddTreatment()
+    {
+        if (_appointment == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(NewTreatmentName))
+        {
+            return;
+        }
+
+        if (!decimal.TryParse(NewTreatmentCostText, out var cost) || cost < 0)
+        {
+            return;
+        }
+
+        _appointment.Treatments ??= new List<TreatmentDTO>();
+        _appointment.Treatments.Add(new TreatmentDTO
+        {
+            Name = NewTreatmentName.Trim(),
+            Cost = cost
+        });
+
+        NewTreatmentName = string.Empty;
+        NewTreatmentCostText = string.Empty;
+
+        OnPropertyChanged(nameof(Treatments));
+        OnPropertyChanged(nameof(TotalCost));
+    }
+
+    private void RemoveTreatment(TreatmentDTO? treatment)
+    {
+        if (_appointment?.Treatments == null || treatment == null)
+        {
+            return;
+        }
+
+        if (_appointment.Treatments.Remove(treatment))
+        {
+            OnPropertyChanged(nameof(Treatments));
+            OnPropertyChanged(nameof(TotalCost));
+        }
     }
 }
