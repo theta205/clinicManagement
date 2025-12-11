@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 namespace Library.Clinic.Services
 {
-    // Simple file-based persistence for patients, modeled after the Blog Filebase sample.
     public class Filebase
     {
         private readonly string _root;
