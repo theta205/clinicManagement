@@ -137,11 +137,9 @@ public class PhysicianDetailsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(GraduationDate));
         OnPropertyChanged(nameof(SpecializationsText));
 
-        // 🔥 This is the required fix:
         ((Command)SaveCommand).ChangeCanExecute();
     }
 
-    // Used by Shell navigation + QueryProperty
     public async Task Load()
     {
         await LoadPhysician(PhysicianId);

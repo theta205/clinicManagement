@@ -304,7 +304,6 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
             _isNewAppointment = true;
         }
 
-        // Notify all properties changed
         OnPropertyChanged(nameof(Id));
         OnPropertyChanged(nameof(Date));
         OnPropertyChanged(nameof(StartTime));
@@ -319,11 +318,9 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Treatments));
         OnPropertyChanged(nameof(TotalCost));
 
-        // 🔥 This is the required fix:
         ((Command)SaveCommand).ChangeCanExecute();
     }
 
-    // Used by Shell navigation + QueryProperty
     public async Task Load()
     {
         await LoadAppointment(AppointmentId);
@@ -335,7 +332,6 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
         {
             if (_appointment != null && CanSave())
             {
-                // Update patient and physician names based on selected IDs
                 var selectedPatient = PatientServiceProxy.Current.Patients.FirstOrDefault(p => p.Id == _appointment.PatientId);
                 var selectedPhysician = PhysicianServiceProxy.Current.Physicians.FirstOrDefault(p => p.Id == _appointment.PhysicianId);
                 
@@ -349,8 +345,6 @@ public class AppointmentDetailsViewModel : INotifyPropertyChanged
                     _appointment.PhysicianName = selectedPhysician.Name;
                 }
 
-                // Client-side room conflict validation: no overlapping
-                // appointments in the same room at the same time.
                 if (!string.IsNullOrWhiteSpace(_appointment.Room))
                 {
                     var sameRoomAppointments = AppointmentServiceProxy.Current.Appointments

@@ -30,13 +30,10 @@ namespace Library.Clinic.Services
             }
         }
 
-        // THIS list is your REAL storage.
-        // Never overwrite it during search.
         private List<AppointmentDTO> allAppointments = new List<AppointmentDTO>();
 
         private AppointmentServiceProxy()
         {
-            // Initialize with sample demo data
             allAppointments = new List<AppointmentDTO> {
                 new AppointmentDTO { 
                     Id = 1, 
@@ -66,10 +63,8 @@ namespace Library.Clinic.Services
             Appointments = allAppointments;
         }
 
-        // Public-facing list (filtered or sorted)
         public List<AppointmentDTO> Appointments { get; private set; } = new List<AppointmentDTO>();
 
-        // Always use ALL appointments for ID assignment
         private int lastKey
         {
             get
@@ -86,18 +81,15 @@ namespace Library.Clinic.Services
         {
             try
             {
-                // Try web service first
                 var payload = await new WebRequestHandler().Post("/appointment", appointment);
                 var newAppointment = JsonConvert.DeserializeObject<AppointmentDTO>(payload);
                 
                 if (newAppointment != null && newAppointment.Id > 0 && appointment.Id == 0)
                 {
-                    // New appointment returned with a real ID from server
                     allAppointments.Add(newAppointment);
                 }
                 else if (newAppointment != null && appointment != null && appointment.Id > 0 && appointment.Id == newAppointment.Id)
                 {
-                    // Edit: replace existing appointment in list
                     var currentAppointment = allAppointments.FirstOrDefault(a => a.Id == newAppointment.Id);
                     var index = allAppointments.Count;
                     if (currentAppointment != null)
@@ -109,7 +101,6 @@ namespace Library.Clinic.Services
                 }
                 else
                 {
-                    // Server returned Id = 0 or invalid response, use local fallback
                     return AddOrUpdateAppointmentLocal(appointment);
                 }
                 
@@ -117,7 +108,6 @@ namespace Library.Clinic.Services
             }
             catch (Exception)
             {
-                // Fallback to local storage if web service fails
                 return AddOrUpdateAppointmentLocal(appointment);
             }
         }
@@ -139,7 +129,6 @@ namespace Library.Clinic.Services
             }
             else
             {
-                // Update existing appointment
                 var existingAppointment = allAppointments.FirstOrDefault(a => a.Id == appointment.Id);
                 if (existingAppointment != null)
                 {
@@ -157,10 +146,8 @@ namespace Library.Clinic.Services
         {
             try
             {
-                // Try web service first
                 await new WebRequestHandler().Delete($"/appointment/{appointmentId}");
                 
-                // Remove from local list regardless of web service success
                 var appointment = allAppointments.FirstOrDefault(a => a.Id == appointmentId);
                 if (appointment != null)
                 {
@@ -170,7 +157,6 @@ namespace Library.Clinic.Services
             }
             catch (Exception)
             {
-                // Fallback to local storage if web service fails
                 var appointment = allAppointments.FirstOrDefault(a => a.Id == appointmentId);
                 if (appointment != null)
                 {

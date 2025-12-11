@@ -5,7 +5,6 @@ namespace Library.Clinic.Models
     public class Physician
     {
         public int Id { get; set; }
-        // Basic Demographics
         public string Name { get; set; } = string.Empty;
         public string LicenseNumber { get; set; } = string.Empty;
         public DateTime GraduationDate { get; set; }

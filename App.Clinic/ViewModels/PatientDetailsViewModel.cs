@@ -59,7 +59,6 @@ public class PatientDetailsViewModel : INotifyPropertyChanged
             _isNewPatient = true;
         }
         
-        // Listen to property changes to update CanSave
         if (Patient != null)
         {
             Patient.PropertyChanged += (sender, e) =>
